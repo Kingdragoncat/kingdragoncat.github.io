@@ -229,14 +229,14 @@
     var targetW=Math.min(W*0.74, 820);
     nameFontPx=300*targetW/wdt; nameCX=W/2; nameCY=H*0.4;
   }
-  var curt=[{col:'70,235,150',sp:0.05,wl:0.6,amp:72,base:0.52,h:1.05},
-            {col:'80,215,220',sp:-0.035,wl:0.42,amp:96,base:0.55,h:1.05},
-            {col:'165,110,255',sp:0.025,wl:0.85,amp:62,base:0.45,h:1.0},
-            {col:'210,85,225',sp:-0.02,wl:0.55,amp:78,base:0.5,h:0.9}];
+  var curt=[{col:'70,235,150',sp:0.05,wl:0.6,amp:72,base:0.4,h:1.05},
+            {col:'80,215,220',sp:-0.035,wl:0.42,amp:96,base:0.48,h:1.05},
+            {col:'165,110,255',sp:0.025,wl:0.85,amp:62,base:0.64,h:0.9},
+            {col:'210,85,225',sp:-0.02,wl:0.55,amp:78,base:0.72,h:0.85}];
   function drawAurora(t){
     ac.clearRect(0,0,W,H);
     var bgw=ac.createLinearGradient(0,0,0,H);
-    bgw.addColorStop(0,'rgba(70,45,120,0.15)'); bgw.addColorStop(0.4,'rgba(42,125,100,0.18)'); bgw.addColorStop(1,'rgba(20,55,78,0.12)');
+    bgw.addColorStop(0,'rgba(45,155,110,0.17)'); bgw.addColorStop(0.5,'rgba(38,120,140,0.15)'); bgw.addColorStop(1,'rgba(90,52,138,0.15)');
     ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
     ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
     curt.forEach(function(b,bi){ var baseY=H*b.base, ph=t*b.sp+bi, x, y;
