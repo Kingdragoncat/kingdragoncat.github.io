@@ -116,12 +116,6 @@
     <div class="ph" style="display:none">your photo<br>(me.jpg)</div>
   </div>
 
-  <div class="center">
-    <div class="sig">Jonah Novoseller</div>
-    <div class="role">developer · security · rust · hardware</div>
-    <div class="cue">choose a path above ·  Nokia intern ·  founder of Mythofy</div>
-  </div>
-
   <button class="audio" id="audioBtn" title="ambient sound">&#9834;</button>
   <div class="credit">written in the stars</div>
 
@@ -263,10 +257,6 @@
       sc.globalAlpha=tw*0.9; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
     sc.globalAlpha=1;
     drawLand();
-    for(i=0;i<snow.length;i++){ var f=snow[i]; f.y += f.sp*0.016; f.x += Math.sin(t+f.ph)*0.3 + f.dr;
-      if(f.y>H+4){ f.y=-4; f.x=Math.random()*W; }
-      sc.globalAlpha=0.75; sc.beginPath(); sc.arc(f.x,f.y,f.r,0,6.2832); sc.fillStyle='#eef7ff'; sc.fill(); }
-    sc.globalAlpha=1;
     sc.lineCap='round';
     for(i=0;i<edges.length;i++){ var e=edges[i], p=clamp((t-e.start)/0.55,0,1);
       if(p<=0) continue; var a=word[e.a], b=word[e.b];
