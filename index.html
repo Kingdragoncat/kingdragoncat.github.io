@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonah Novoseller — Developer &amp; Founder</title>
+<meta name="description" content="Jonah Novoseller (Kingdragoncat) — 16-year-old full-stack developer, Future Tech Intern at Nokia, founder of Mythofy, and 8x national debater. Security, Rust, and hardware.">
+<meta property="og:title" content="Jonah Novoseller — Developer &amp; Founder">
+<meta property="og:description" content="16-year-old developer building security tools, hardware, and platforms. Nokia intern. Founder of Mythofy.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#0a0e14; --panel:#0f1520; --line:#1e2836; --muted:#7d8da3;
+    --text:#d7e0ee; --accent:#4dd0a7; --accent2:#58a6ff; --warn:#e5c07b;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--mono); line-height:1.6; font-size:16px;
+    background-image:radial-gradient(circle at 20% -10%, rgba(77,208,167,.08), transparent 40%),
+                     radial-gradient(circle at 90% 10%, rgba(88,166,255,.07), transparent 40%);
+  }
+  a{color:var(--accent2); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px}
+
+  header{position:sticky; top:0; z-index:10; backdrop-filter:blur(8px);
+    background:rgba(10,14,20,.72); border-bottom:1px solid var(--line)}
+  nav{display:flex; align-items:center; justify-content:space-between; height:56px}
+  nav .logo{color:var(--accent); font-weight:700}
+  nav .logo b{color:var(--text)}
+  nav .links a{color:var(--muted); margin-left:18px; font-size:14px}
+  nav .links a:hover{color:var(--text); text-decoration:none}
+  @media(max-width:560px){nav .links a{margin-left:12px}}
+
+  .hero{padding:70px 0 40px}
+  .term{background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .term .bar{display:flex; gap:8px; padding:12px 14px; border-bottom:1px solid var(--line); background:#0c121c}
+  .term .bar i{width:12px; height:12px; border-radius:50%; display:inline-block}
+  .dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
+  .term .body{padding:22px}
+  .term .line{white-space:pre-wrap}
+  .prompt{color:var(--accent)}
+  .cmd{color:var(--text)}
+  h1{font-size:34px; margin:14px 0 6px; letter-spacing:.5px}
+  h1 .hl{color:var(--accent)}
+  .sub{color:var(--muted); margin:0 0 18px}
+  .cursor{display:inline-block; width:9px; height:18px; background:var(--accent);
+    vertical-align:-3px; margin-left:2px; animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  .badges{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+  .badge{border:1px solid var(--line); background:#0c121c; color:var(--muted);
+    padding:4px 10px; border-radius:20px; font-size:12px}
+  .badge b{color:var(--accent)}
+
+  .cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
+  .btn{border:1px solid var(--line); background:#0c121c; color:var(--text);
+    padding:9px 16px; border-radius:8px; font-size:14px; transition:.15s}
+  .btn:hover{border-color:var(--accent); color:var(--accent); text-decoration:none}
+  .btn.primary{border-color:var(--accent); color:var(--accent)}
+
+  section{padding:44px 0; border-top:1px solid var(--line)}
+  .tag{color:var(--accent); font-size:13px; letter-spacing:2px; text-transform:uppercase}
+  h2{font-size:22px; margin:6px 0 18px}
+  p.lead{color:var(--text)}
+  .muted{color:var(--muted)}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px;
+    transition:.15s; display:flex; flex-direction:column}
+  .card:hover{border-color:var(--accent); transform:translateY(-2px)}
+  .card h3{margin:0 0 4px; font-size:17px}
+  .card h3 a{color:var(--text)}
+  .card h3 a:hover{color:var(--accent); text-decoration:none}
+  .card .lang{font-size:12px; color:var(--warn); margin-bottom:8px}
+  .card p{margin:0 0 14px; color:var(--muted); font-size:14px; flex:1}
+  .card .links a{font-size:13px; margin-right:14px}
+
+  .contact .grid{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:640px){.contact .grid{grid-template-columns:1fr}}
+  .contact .card{align-items:flex-start}
+  .contact .card .k{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:1px}
+  .contact .card .v{margin-top:4px; word-break:break-all}
+
+  footer{border-top:1px solid var(--line); padding:26px 0; color:var(--muted); font-size:13px; text-align:center}
+</style>
+</head>
+<body>
+
+<header><div class="wrap"><nav>
+  <div class="logo">~/<b>jonah</b></div>
+  <div class="links">
+    <a href="#about">about</a>
+    <a href="#projects">projects</a>
+    <a href="#contact">contact</a>
+    <a href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">github</a>
+  </div>
+</nav></div></header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="term">
+      <div class="bar"><i class="dot-r"></i><i class="dot-y"></i><i class="dot-g"></i></div>
+      <div class="body">
+        <div class="line"><span class="prompt">jonah@novoseller</span>:<span style="color:var(--accent2)">~</span>$ <span class="cmd">whoami</span></div>
+        <h1>Jonah <span class="hl">Novoseller</span></h1>
+        <p class="sub">aka <b>kingdragoncat</b> — 16 y/o full-stack developer<span class="cursor"></span></p>
+        <p class="muted" style="margin:0">Future Tech Intern @ Nokia · Founder of Mythofy Inc. · 8&times; national debater</p>
+        <div class="badges">
+          <span class="badge"><b>focus:</b> security · red teaming</span>
+          <span class="badge"><b>langs:</b> Rust · TypeScript · Java · C</span>
+          <span class="badge"><b>into:</b> hardware · SSH · secure terminals</span>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/jonah-novoseller/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="#projects">Projects</a>
+          <a class="btn" href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="tag">// about</div>
+    <h2>Who I am</h2>
+    <p class="lead">I'm a 16-year-old developer from Canada who ships real, production systems: web platforms, Minecraft plugins, payment infrastructure, and open-source security hardware. By day I'm a Future Tech Intern at Nokia; the rest of the time I build <a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy Inc.</a>, a company I founded.</p>
+    <p class="muted">I'm drawn to security, red teaming, low-level systems, and hardware — right now I'm learning PCB design and building my own hardware security key. Away from code, I'm an 8&times; national debater and I mentor students in debate and public speaking, so I care as much about clear communication as clean code.</p>
+  </section>
+
+  <section id="projects">
+    <div class="tag">// projects</div>
+    <h2>Things I've built</h2>
+    <div class="grid">
+
+      <div class="card">
+        <h3><a href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">Knox&#8209;Key</a></h3>
+        <div class="lang">C · hardware</div>
+        <p>An open-source USB-C hardware authenticator. Zero-trust hardware architecture with a dedicated secure element, for secure digital identity and cryptographic operations.</p>
+        <div class="links"><a href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+      <div class="card">
+        <h3><a href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">blackbox</a></h3>
+        <div class="lang">Rust · security</div>
+        <p>A "flight recorder" for terminal &amp; SSH sessions. Records and replays sessions, full-text search, and tamper-evident hash-chained logs. A lightweight, self-hostable slice of session audit.</p>
+        <div class="links"><a href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+      <div class="card">
+        <h3><a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy</a></h3>
+        <div class="lang">Next.js · TypeScript</div>
+        <p>A platform of tools for creators, developers, and community owners. The company I founded and lead.</p>
+        <div class="links"><a href="https://mythofy.net" target="_blank" rel="noopener">website →</a></div>
+      </div>
+
+      <div class="card">
+        <h3><a href="https://mythopay.net" target="_blank" rel="noopener">Mythopay</a></h3>
+        <div class="lang">Node.js · Stripe Connect</div>
+        <p>A Stripe Connect payment system built for the Minecraft creator economy.</p>
+        <div class="links"><a href="https://mythopay.net" target="_blank" rel="noopener">website →</a></div>
+      </div>
+
+      <div class="card">
+        <h3><a href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">CombatGhost</a></h3>
+        <div class="lang">Java · Minecraft</div>
+        <p>An anti-combat-log plugin that tags players in combat and spawns ghost NPCs on logout, with WorldGuard region integration.</p>
+        <div class="links"><a href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+      <div class="card">
+        <h3><a href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">MythofyLaunchPads</a></h3>
+        <div class="lang">Java · Minecraft</div>
+        <p>A lightweight plugin adding fully configurable launchpads — custom materials, velocities, cooldowns, and synced pads.</p>
+        <div class="links"><a href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">source →</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="tag">// contact</div>
+    <h2>Get in touch</h2>
+    <p class="muted">Open to interesting technical conversations and collaboration on security tools, creator platforms, and infrastructure.</p>
+    <div class="grid">
+      <a class="card" href="https://www.linkedin.com/in/jonah-novoseller/" target="_blank" rel="noopener">
+        <span class="k">LinkedIn</span><span class="v">in/jonah-novoseller</span>
+      </a>
+      <a class="card" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">
+        <span class="k">GitHub</span><span class="v">@Kingdragoncat</span>
+      </a>
+      <div class="card">
+        <span class="k">Discord</span><span class="v">@kingdragoncat</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">© <span id="yr"></span> Jonah Novoseller · built with a focus on shipping real systems</div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
