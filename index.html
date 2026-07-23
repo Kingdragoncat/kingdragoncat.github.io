@@ -25,6 +25,11 @@
   #sky{z-index:1}
   a{color:var(--teal); text-decoration:none}
 
+  .vignette{position:fixed; inset:0; z-index:4; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 38%, rgba(2,5,8,.6) 100%)}
+  .grain{position:fixed; inset:0; z-index:4; pointer-events:none; opacity:.045; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
   .ui{position:fixed; inset:0; z-index:5; pointer-events:none}
   .ui > *{pointer-events:auto}
 
@@ -48,6 +53,9 @@
   .avatar{position:absolute; left:50%; top:34%; transform:translate(-50%,-50%); width:96px; height:96px;
     border-radius:50%; overflow:hidden; border:1px solid var(--line); box-shadow:0 0 30px rgba(126,240,182,.35);
     background:rgba(10,18,20,.7); display:none; align-items:center; justify-content:center}
+  .avatar::before{content:''; position:absolute; inset:-7px; border-radius:50%; border:1px solid rgba(126,240,182,.35);
+    animation:ringpulse 4.5s ease-in-out infinite; pointer-events:none}
+  @keyframes ringpulse{0%,100%{transform:scale(1); opacity:.55} 50%{transform:scale(1.1); opacity:.12}}
   .avatar img{width:100%; height:100%; object-fit:cover; display:block}
   .avatar .ph{font-family:var(--serif); font-size:12px; color:var(--muted); text-align:center; padding:6px}
 
@@ -59,6 +67,9 @@
     border-radius:18px; backdrop-filter:blur(14px); box-shadow:0 30px 90px rgba(0,0,0,.55);
     opacity:0; visibility:hidden; transition:.35s; z-index:7}
   .panel.on{opacity:1; visibility:visible; transform:translate(-50%,-50%) scale(1)}
+  .panel::before{content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:18px 18px 0 0;
+    background:var(--accent,var(--green)); box-shadow:0 0 16px var(--accent,var(--green))}
+  #p-about{--accent:var(--green)} #p-projects{--accent:var(--teal)} #p-contact{--accent:var(--violet)}
   .panel .ph{display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid var(--line)}
   .panel .ph h2{font-family:var(--serif); font-weight:600; font-size:26px; margin:0; color:var(--ink)}
   .panel .ph .x{background:none; border:0; color:var(--muted); font-size:22px; cursor:pointer; line-height:1}
@@ -93,17 +104,19 @@
     border:1px solid var(--line); background:rgba(10,18,20,.6); color:var(--muted); cursor:pointer; font-size:16px}
   .audio:hover{color:var(--green)}
   .credit{position:absolute; bottom:20px; left:22px; z-index:6; color:var(--muted); font-family:var(--serif);
-    font-size:13px; opacity:.6}
-  @media(prefers-reduced-motion:reduce){.center .cue{animation:none}}
+    font-size:13px; opacity:.55; letter-spacing:.5px}
+  @media(prefers-reduced-motion:reduce){.center .cue{animation:none} .avatar::before{animation:none}}
 </style>
 </head>
 <body>
 <canvas id="aurora"></canvas>
 <canvas id="sky"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
 
 <div class="ui">
   <nav>
-    <span></span>
+    <span class="brand"></span>
     <span class="links">
       <button data-panel="about">About</button>
       <button data-panel="projects">Projects</button>
@@ -116,6 +129,7 @@
     <div class="ph" style="display:none">your photo<br>(me.jpg)</div>
   </div>
 
+  <div class="credit">Winnipeg, Canada</div>
   <button class="audio" id="audioBtn" title="ambient sound">&#9834;</button>
 
   <div class="scrim" id="scrim"></div>
@@ -163,65 +177,34 @@
   var ac = A.getContext('2d'), sc = S.getContext('2d');
   var W, H, DPR = Math.min(window.devicePixelRatio||1, 2);
   var nameFontPx=0, nameCX=0, nameCY=0;
+  var mx=0, my=0, pmx=0, pmy=0;
 
   function resize(){
     W = window.innerWidth; H = window.innerHeight;
     [A,S].forEach(function(cv){ cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px'; });
     ac.setTransform(DPR,0,0,DPR,0,0); sc.setTransform(DPR,0,0,DPR,0,0);
-    buildConstellation(); computeNameBox();
+    computeNameBox(); buildForest();
   }
 
   var stars = [], shooters = [];
   function buildStars(){ stars=[]; var n=Math.round(W*H/6500);
-    for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random(), vx:(0.08+Math.random()*0.24)*(Math.random()<0.5?-1:1)}); } }
+    for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
 
-  var snow = [];
-  function buildSnow(){ snow=[]; var n=Math.round(W*H/16000);
-    for(var i=0;i<n;i++){ snow.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*2+0.6, sp:8+Math.random()*22, dr:Math.random()*0.6-0.3, ph:Math.random()*6.28}); } }
-
-  var word = [], edges = [], paths = [], totalOrd = 0, fontReady = false;
-  function buildConstellation(){
-    word=[]; edges=[]; if(!fontReady) return;
-    var off=document.createElement('canvas'); off.width=1400; off.height=460;
-    var oc=off.getContext('2d');
-    oc.clearRect(0,0,off.width,off.height);
-    oc.fillStyle='#fff'; oc.textAlign='center'; oc.textBaseline='middle';
-    oc.font='320px "Great Vibes"';
-    var fw=oc.measureText('Jonah').width; var fs=320*Math.min(1,(off.width*0.86)/fw);
-    oc.font=fs+'px "Great Vibes"';
-    oc.fillText('Jonah', off.width/2, off.height/2);
-    var img=oc.getImageData(0,0,off.width,off.height).data, pts=[], x, y, i, j;
-    for(y=0;y<off.height;y+=3){ for(x=0;x<off.width;x+=3){ if(img[(y*off.width+x)*4+3]>128) pts.push([x,y]); } }
-    var D=21, acc=[];
-    for(i=0;i<pts.length;i++){ var p=pts[i], ok=true;
-      for(j=0;j<acc.length;j++){ var ax=p[0]-acc[j][0], ay=p[1]-acc[j][1]; if(ax*ax+ay*ay<D*D){ ok=false; break; } }
-      if(ok) acc.push(p); }
-    if(!acc.length) return;
-    var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
-    acc.forEach(function(p){ if(p[0]<minx)minx=p[0]; if(p[0]>maxx)maxx=p[0]; if(p[1]<miny)miny=p[1]; if(p[1]>maxy)maxy=p[1]; });
-    var bw=(maxx-minx)||1, bh=(maxy-miny)||1;
-    var targetW=Math.min(W*0.6, 620), scale=targetW/bw, ox=(W-targetW)/2, oy=H*0.15;
-    acc.sort(function(a,b){ return a[0]-b[0]; });
-    acc.forEach(function(p,ix){ word.push({ x:ox+(p[0]-minx)*scale, y:oy+(p[1]-miny)*scale, t:Math.random()*6.28, appear:0.4+ix*0.013, mag:0.7+Math.pow(Math.random(),2.2)*1.25 }); });
-    var TH=D*1.9*scale, visited={}, count=0, total=word.length, ord=0; paths=[];
-    function nearest(idx){ var best=-1, bd=TH*TH, q;
-      for(q=0;q<word.length;q++){ if(q===idx||visited[q]) continue;
-        var dx=word[idx].x-word[q].x, dy=word[idx].y-word[q].y, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=q; } }
-      return best; }
-    while(count<total){
-      var st=-1, q; for(q=0;q<word.length;q++){ if(!visited[q]){ st=q; break; } }
-      if(st<0) break; visited[st]=1; count++; word[st].ord=ord++; var chain=[st], cur=st;
-      while(true){ var nx=nearest(cur); if(nx<0) break; visited[nx]=1; count++; word[nx].ord=ord++; chain.push(nx); cur=nx; }
-      paths.push(chain);
-    }
-    totalOrd = ord;
+  var ridge=[], pinesMid=[], pinesFront=[];
+  function buildPines(n, hBase, hVar){
+    var arr=[], spacing=W/n, i, x;
+    for(i=0;i<n;i++){ x = i*spacing + (Math.random()-0.5)*spacing*0.6;
+      arr.push({ x:x, h:hBase + Math.random()*hVar, w:0.55+Math.random()*0.5 }); }
+    return arr;
+  }
+  function buildForest(){
+    ridge=[]; var rn=14, i;
+    for(i=0;i<=rn;i++){ ridge.push(Math.random()*0.5+0.25); }
+    pinesMid = buildPines(Math.max(6,Math.round(W/50)), 0.45, 0.15);
+    pinesFront = buildPines(Math.max(6,Math.round(W/34)), 0.75, 0.35);
   }
 
-  var bands = [
-    {y:0.30, amp:34, wl:0.7, sp:0.06, col:'126,240,182', h:150},
-    {y:0.24, amp:46, wl:0.5, sp:-0.04, col:'99,216,208', h:180},
-    {y:0.20, amp:30, wl:0.9, sp:0.03, col:'150,120,255', h:150}
-  ];
+  var fontReady=false;
   function computeNameBox(){
     if(!fontReady) return;
     sc.font='300px "Great Vibes"';
@@ -229,6 +212,7 @@
     var targetW=Math.min(W*0.74, 820);
     nameFontPx=300*targetW/wdt; nameCX=W/2; nameCY=H*0.4;
   }
+
   var curt=[{col:'70,225,150',sp:0.05,wl:0.6,amp:70,base:0.5,h:1.05},
             {col:'80,205,215',sp:-0.035,wl:0.42,amp:95,base:0.55,h:1.05},
             {col:'150,115,255',sp:0.025,wl:0.85,amp:55,base:0.42,h:0.95}];
@@ -238,7 +222,8 @@
     bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
     ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
     ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
-    curt.forEach(function(b,bi){ var baseY=H*b.base + Math.sin(t*0.25+bi*1.7)*H*0.05, ph=t*b.sp*3.4+bi, x, y;
+    curt.forEach(function(b,bi){
+      var baseY=H*b.base + Math.sin(t*0.25+bi*1.7)*H*0.05 + pmy*H*0.012, ph=t*b.sp*3.4+bi+pmx*0.4, x, y;
       ac.beginPath(); ac.moveTo(0, baseY);
       for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
       ac.lineTo(W, baseY-H*b.h); ac.lineTo(0, baseY-H*b.h); ac.closePath();
@@ -251,22 +236,53 @@
       ac.fillText('Jonah', nameCX, nameCY); ac.globalCompositeOperation='source-over'; }
   }
 
-  function drawLand(){
-    function hill(base, amp, col){
-      var x; sc.beginPath(); sc.moveTo(0,H); sc.lineTo(0,base);
-      for(x=0;x<=W;x+=20){ sc.lineTo(x, base + Math.sin(x/W*6+amp)*amp*6 - Math.sin(x/W*3)*amp*4); }
-      sc.lineTo(W,H); sc.closePath(); sc.fillStyle=col; sc.fill();
-    }
-    hill(H*0.86, 2.2, 'rgba(20,34,40,0.9)');
-    hill(H*0.90, 1.4, 'rgba(200,225,230,0.10)');
-    hill(H*0.93, 1.0, 'rgba(220,238,240,0.14)');
+  function pineShape(ctx, x, baseY, h, w){
+    var tw = 40*w, th = 150*h;
+    ctx.moveTo(x, baseY);
+    ctx.lineTo(x - tw*0.5, baseY);
+    ctx.lineTo(x - tw*0.18, baseY - th*0.42);
+    ctx.lineTo(x - tw*0.34, baseY - th*0.42);
+    ctx.lineTo(x - tw*0.10, baseY - th*0.72);
+    ctx.lineTo(x - tw*0.22, baseY - th*0.72);
+    ctx.lineTo(x, baseY - th);
+    ctx.lineTo(x + tw*0.22, baseY - th*0.72);
+    ctx.lineTo(x + tw*0.10, baseY - th*0.72);
+    ctx.lineTo(x + tw*0.34, baseY - th*0.42);
+    ctx.lineTo(x + tw*0.18, baseY - th*0.42);
+    ctx.lineTo(x + tw*0.5, baseY);
+    ctx.closePath();
+  }
+
+  function drawForest(){
+    var ry = H*0.86, rw = W/(ridge.length-1||1), i;
+    sc.beginPath(); sc.moveTo(0,H);
+    sc.lineTo(0, ry - ridge[0]*H*0.14);
+    for(i=0;i<ridge.length;i++){ sc.lineTo(i*rw + pmx*4, ry - ridge[i]*H*0.14); }
+    sc.lineTo(W,H); sc.closePath();
+    var rg = sc.createLinearGradient(0, ry-H*0.14, 0, ry);
+    rg.addColorStop(0,'rgba(150,180,195,0.16)'); rg.addColorStop(1,'rgba(70,100,110,0.05)');
+    sc.fillStyle=rg; sc.fill();
+
+    var midY = H*0.90, midOff = pmx*10;
+    sc.beginPath();
+    pinesMid.forEach(function(p){ pineShape(sc, p.x+midOff, midY, p.h, p.w); });
+    sc.fillStyle='rgba(18,42,38,0.6)'; sc.fill();
+
+    var mistG = sc.createLinearGradient(0, H*0.88, 0, H*0.98);
+    mistG.addColorStop(0,'rgba(180,210,205,0)'); mistG.addColorStop(1,'rgba(180,210,205,0.12)');
+    sc.fillStyle=mistG; sc.fillRect(0,H*0.85,W,H*0.15);
+
+    var frontY = H*0.99, frontOff = pmx*22;
+    sc.beginPath();
+    pinesFront.forEach(function(p){ pineShape(sc, p.x+frontOff, frontY, p.h, p.w); });
+    sc.fillStyle='#050d0a'; sc.fill();
   }
 
   var t0 = performance.now();
-  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
   function frame(now){
     requestAnimationFrame(frame);
     var t=(now-t0)/1000, i;
+    pmx += (mx-pmx)*0.04; pmy += (my-pmy)*0.04;
     drawAurora(t);
     sc.clearRect(0,0,W,H);
     for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.5+0.5*Math.sin(t*s.s*2.6+s.t);
@@ -283,13 +299,14 @@
       var tx=sh.x-sh.vx*7, ty=sh.y-sh.vy*7, gg=sc.createLinearGradient(sh.x,sh.y,tx,ty);
       gg.addColorStop(0,'rgba(255,255,255,'+(Math.min(1,sh.life)*0.9)+')'); gg.addColorStop(1,'rgba(255,255,255,0)');
       sc.strokeStyle=gg; sc.lineWidth=2; sc.beginPath(); sc.moveTo(sh.x,sh.y); sc.lineTo(tx,ty); sc.stroke(); }
-    drawLand();
-
+    drawForest();
   }
 
-  window.addEventListener('resize', function(){ resize(); buildStars(); buildSnow(); });
-  resize(); buildStars(); buildSnow();
-  function fontDone(){ fontReady=true; buildConstellation(); computeNameBox(); if(reduce){ t0=performance.now()-9000; frame(performance.now()); } }
+  window.addEventListener('resize', function(){ resize(); buildStars(); });
+  window.addEventListener('mousemove', function(e){ mx=(e.clientX/W)*2-1; my=(e.clientY/H)*2-1; });
+  window.addEventListener('mouseleave', function(){ mx=0; my=0; });
+  resize(); buildStars();
+  function fontDone(){ fontReady=true; computeNameBox(); if(reduce){ t0=performance.now()-9000; frame(performance.now()); } }
   if(document.fonts && document.fonts.load){ document.fonts.load('320px "Great Vibes"').then(fontDone); } else { fontDone(); }
   if(reduce){ drawAurora(6); t0=performance.now()-9000; frame(performance.now()); } else { requestAnimationFrame(frame); }
 
