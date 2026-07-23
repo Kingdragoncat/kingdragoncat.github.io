@@ -103,7 +103,7 @@
 
 <div class="ui">
   <nav>
-    <span class="brand">Jonah</span>
+    <span></span>
     <span class="links">
       <button data-panel="about">About</button>
       <button data-panel="projects">Projects</button>
@@ -117,7 +117,6 @@
   </div>
 
   <button class="audio" id="audioBtn" title="ambient sound">&#9834;</button>
-  <div class="credit">written in the stars</div>
 
   <div class="scrim" id="scrim"></div>
 
@@ -230,13 +229,14 @@
     var targetW=Math.min(W*0.74, 820);
     nameFontPx=300*targetW/wdt; nameCX=W/2; nameCY=H*0.4;
   }
-  var curt=[{col:'70,225,150',sp:0.05,wl:0.6,amp:70,base:0.5,h:1.05},
-            {col:'80,205,215',sp:-0.035,wl:0.42,amp:95,base:0.55,h:1.05},
-            {col:'150,115,255',sp:0.025,wl:0.85,amp:55,base:0.42,h:0.95}];
+  var curt=[{col:'70,235,150',sp:0.05,wl:0.6,amp:72,base:0.52,h:1.05},
+            {col:'80,215,220',sp:-0.035,wl:0.42,amp:96,base:0.55,h:1.05},
+            {col:'165,110,255',sp:0.025,wl:0.85,amp:62,base:0.45,h:1.0},
+            {col:'210,85,225',sp:-0.02,wl:0.55,amp:78,base:0.5,h:0.9}];
   function drawAurora(t){
     ac.clearRect(0,0,W,H);
     var bgw=ac.createLinearGradient(0,0,0,H);
-    bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
+    bgw.addColorStop(0,'rgba(70,45,120,0.15)'); bgw.addColorStop(0.4,'rgba(42,125,100,0.18)'); bgw.addColorStop(1,'rgba(20,55,78,0.12)');
     ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
     ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
     curt.forEach(function(b,bi){ var baseY=H*b.base, ph=t*b.sp+bi, x, y;
@@ -244,7 +244,7 @@
       for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
       ac.lineTo(W, baseY-H*b.h); ac.lineTo(0, baseY-H*b.h); ac.closePath();
       var g=ac.createLinearGradient(0, baseY-H*b.h, 0, baseY+40);
-      g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.17)'); g.addColorStop(1,'rgba('+b.col+',0)');
+      g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.22)'); g.addColorStop(1,'rgba('+b.col+',0)');
       ac.fillStyle=g; ac.fill(); });
     ac.filter='none'; ac.globalCompositeOperation='source-over';
     if(nameFontPx){ ac.globalCompositeOperation='destination-out'; ac.fillStyle='#000';
