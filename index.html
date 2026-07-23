@@ -4,345 +4,299 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jonah Novoseller</title>
-<meta name="description" content="Jonah Novoseller — 16-year-old developer. Security, Rust, hardware. Nokia intern, founder of Mythofy, 8x national debater.">
+<meta name="description" content="Jonah Novoseller — 16-year-old developer. Nokia Future Tech Intern, founder of Mythofy, 8x national debater. Rust, security, hardware, systems.">
 <meta property="og:title" content="Jonah Novoseller">
-<meta property="og:description" content="16-year-old developer. Written in the stars.">
+<meta property="og:description" content="16-year-old developer. Nokia Future Tech Intern · Founder, Mythofy.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#eaf2ee; --muted:#9fb4b0; --green:#7ef0b6; --teal:#63d8d0; --violet:#b79bff;
-    --panel:rgba(12,22,24,.62); --line:rgba(126,240,182,.28);
-    --serif:"Cormorant Garamond", Georgia, serif; --script:"Great Vibes", cursive; --sans:"Inter", system-ui, sans-serif;
+    --bg:#0a0d10; --bg2:#0d1114; --ink:#eef2f4; --dim:#8b969b; --line:rgba(238,242,244,.09);
+    --amber:#e8a33d; --amber-soft:rgba(232,163,61,.14);
+    --sans:"Space Grotesk", system-ui, sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace;
   }
   *{box-sizing:border-box}
-  html,body{height:100%; margin:0}
-  body{background:#04070b; color:var(--ink); font-family:var(--sans); overflow:hidden}
-  canvas{position:fixed; inset:0; display:block}
-  #aurora{z-index:0; filter:saturate(1.25); opacity:.95; mix-blend-mode:screen}
-  #sky{z-index:1}
-  a{color:var(--teal); text-decoration:none}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.5;
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  #net{position:fixed; inset:0; z-index:0; opacity:.55}
+  .wrap{position:relative; z-index:1}
+  section{padding:110px clamp(20px,6vw,90px)}
+  .sec-inner{max-width:1080px; margin:0 auto}
+  .kicker{font-family:var(--mono); font-size:12.5px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--amber); margin:0 0 10px}
+  h2{font-family:var(--sans); font-weight:600; font-size:clamp(24px,3.4vw,34px); margin:0 0 28px; letter-spacing:-.2px}
 
-  .vignette{position:fixed; inset:0; z-index:4; pointer-events:none;
-    background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 38%, rgba(2,5,8,.6) 100%)}
-  .grain{position:fixed; inset:0; z-index:4; pointer-events:none; opacity:.045; mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  header{position:fixed; top:0; left:0; right:0; z-index:10; display:flex; align-items:center;
+    justify-content:space-between; padding:20px clamp(20px,6vw,90px); backdrop-filter:blur(10px);
+    background:linear-gradient(rgba(10,13,16,.75),rgba(10,13,16,0))}
+  header .mark{font-family:var(--mono); font-weight:500; font-size:15px; letter-spacing:.5px}
+  header .mark span{color:var(--amber)}
+  header nav{display:flex; gap:28px; font-family:var(--mono); font-size:13px}
+  header nav a{text-decoration:none; color:var(--dim); transition:.2s}
+  header nav a:hover{color:var(--ink)}
+  @media(max-width:600px){header nav{display:none}}
 
-  .ui{position:fixed; inset:0; z-index:5; pointer-events:none}
-  .ui > *{pointer-events:auto}
+  .hero{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding-top:80px}
+  .hero .avatar{width:104px; height:104px; border-radius:50%; overflow:hidden; border:1px solid var(--line);
+    box-shadow:0 0 0 6px var(--amber-soft); margin-bottom:26px}
+  .hero .avatar img{width:100%; height:100%; object-fit:cover; display:block}
+  .hero .eyebrow{font-family:var(--mono); font-size:13px; color:var(--amber); letter-spacing:1.5px;
+    text-transform:uppercase; margin-bottom:14px}
+  .hero h1{font-size:clamp(38px,7.2vw,74px); margin:0; font-weight:700; letter-spacing:-1.5px; line-height:1.02}
+  .hero .role{font-family:var(--mono); font-size:clamp(13px,2vw,16px); color:var(--dim); margin-top:18px; max-width:640px}
+  .hero .role b{color:var(--ink); font-weight:500}
+  .hero .loc{font-family:var(--mono); font-size:12.5px; color:var(--dim); opacity:.7; margin-top:8px}
+  .hero .cta{display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center}
+  .btn{font-family:var(--mono); font-size:13.5px; padding:12px 22px; border-radius:8px; text-decoration:none;
+    border:1px solid var(--line); transition:.2s; display:inline-flex; align-items:center; gap:8px}
+  .btn.primary{background:var(--amber); color:#1a1206; border-color:var(--amber); font-weight:500}
+  .btn.primary:hover{background:#f3b559}
+  .btn.ghost:hover{border-color:var(--amber); color:var(--amber)}
+  .scrolldown{position:absolute; bottom:34px; font-family:var(--mono); font-size:11px; color:var(--dim);
+    opacity:.6; letter-spacing:1px; animation:bob 2.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)}}
 
-  nav{position:absolute; top:0; left:0; right:0; height:64px; display:flex; align-items:center;
-    justify-content:space-between; padding:0 clamp(18px,4vw,46px)}
-  nav .brand{font-family:var(--script); font-size:26px; color:var(--ink); text-shadow:0 0 18px rgba(126,240,182,.5)}
-  nav .links button{background:none; border:0; color:var(--muted); font-family:var(--serif); font-size:19px;
-    letter-spacing:.5px; margin-left:24px; cursor:pointer; transition:.2s}
-  nav .links button:hover{color:var(--green); text-shadow:0 0 14px rgba(126,240,182,.5)}
-  @media(max-width:520px){nav .links button{margin-left:15px; font-size:17px}}
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:8px}
+  @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--bg2); padding:26px 18px; text-align:center}
+  .stat .n{font-family:var(--sans); font-size:clamp(24px,3vw,32px); font-weight:700; color:var(--amber)}
+  .stat .l{font-family:var(--mono); font-size:11.5px; color:var(--dim); margin-top:6px; letter-spacing:.5px}
 
-  .center{position:absolute; left:0; right:0; top:56%; text-align:center; padding:0 20px}
-  .center .sig{font-family:var(--script); font-size:clamp(30px,6vw,52px); color:var(--ink);
-    text-shadow:0 0 24px rgba(126,240,182,.45); line-height:1}
-  .center .role{font-family:var(--serif); font-style:italic; font-size:clamp(15px,2.6vw,20px);
-    color:var(--muted); margin-top:8px; letter-spacing:1px}
-  .center .cue{margin-top:22px; font-family:var(--serif); font-size:15px; color:var(--muted); opacity:.8;
-    animation:pulse 3s ease-in-out infinite}
-  @keyframes pulse{50%{opacity:.35}}
+  .about p{color:#c7d0d3; font-size:16.5px; line-height:1.85; max-width:720px; margin:0 0 16px}
+  .about .tags{display:flex; flex-wrap:wrap; gap:9px; margin-top:26px}
+  .tag{font-family:var(--mono); font-size:12px; color:var(--dim); border:1px solid var(--line);
+    border-radius:20px; padding:6px 13px}
 
-  .avatar{position:absolute; left:50%; top:34%; transform:translate(-50%,-50%); width:96px; height:96px;
-    border-radius:50%; overflow:hidden; border:1px solid var(--line); box-shadow:0 0 30px rgba(126,240,182,.35);
-    background:rgba(10,18,20,.7); display:none; align-items:center; justify-content:center}
-  .avatar::before{content:''; position:absolute; inset:-7px; border-radius:50%; border:1px solid rgba(126,240,182,.35);
-    animation:ringpulse 4.5s ease-in-out infinite; pointer-events:none}
-  @keyframes ringpulse{0%,100%{transform:scale(1); opacity:.55} 50%{transform:scale(1.1); opacity:.12}}
-  .avatar img{width:100%; height:100%; object-fit:cover; display:block}
-  .avatar .ph{font-family:var(--serif); font-size:12px; color:var(--muted); text-align:center; padding:6px}
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line); border-radius:14px; padding:22px; background:var(--bg2);
+    transition:.2s; display:flex; flex-direction:column; text-decoration:none}
+  .card:hover{border-color:var(--amber); transform:translateY(-3px)}
+  .card .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px}
+  .card .nm{font-family:var(--sans); font-weight:600; font-size:18px; color:var(--ink)}
+  .card .star{font-family:var(--mono); font-size:12px; color:var(--amber); display:flex; align-items:center; gap:4px}
+  .card p{font-size:14px; color:var(--dim); line-height:1.65; margin:0 0 16px; flex:1}
+  .card .lang{font-family:var(--mono); font-size:11.5px; color:var(--dim); display:flex; align-items:center; gap:7px}
+  .card .dot{width:8px; height:8px; border-radius:50%; background:var(--amber); display:inline-block}
 
-  .scrim{position:absolute; inset:0; background:rgba(3,6,10,.5); backdrop-filter:blur(3px);
-    opacity:0; visibility:hidden; transition:.35s; z-index:6}
-  .scrim.on{opacity:1; visibility:visible}
-  .panel{position:absolute; left:50%; top:50%; transform:translate(-50%,-46%) scale(.98);
-    width:min(760px,92vw); max-height:82vh; overflow:auto; background:var(--panel); border:1px solid var(--line);
-    border-radius:18px; backdrop-filter:blur(14px); box-shadow:0 30px 90px rgba(0,0,0,.55);
-    opacity:0; visibility:hidden; transition:.35s; z-index:7}
-  .panel.on{opacity:1; visibility:visible; transform:translate(-50%,-50%) scale(1)}
-  .panel::before{content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:18px 18px 0 0;
-    background:var(--accent,var(--green)); box-shadow:0 0 16px var(--accent,var(--green))}
-  #p-about{--accent:var(--green)} #p-projects{--accent:var(--teal)} #p-contact{--accent:var(--violet)}
-  .panel .ph{display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid var(--line)}
-  .panel .ph h2{font-family:var(--serif); font-weight:600; font-size:26px; margin:0; color:var(--ink)}
-  .panel .ph .x{background:none; border:0; color:var(--muted); font-size:22px; cursor:pointer; line-height:1}
-  .panel .pb{padding:22px}
-  .panel p{color:#cfe0da; line-height:1.7; margin:0 0 12px}
-  .panel .dim{color:var(--muted)}
+  .timeline{border-left:1px solid var(--line); margin-left:6px; padding-left:28px; display:flex;
+    flex-direction:column; gap:34px}
+  .tl-item{position:relative}
+  .tl-item::before{content:''; position:absolute; left:-33px; top:4px; width:9px; height:9px; border-radius:50%;
+    background:var(--amber); box-shadow:0 0 0 4px var(--amber-soft)}
+  .tl-item .when{font-family:var(--mono); font-size:11.5px; color:var(--amber); letter-spacing:1px; text-transform:uppercase}
+  .tl-item h3{margin:6px 0 6px; font-size:19px; font-weight:600}
+  .tl-item p{margin:0; color:var(--dim); font-size:14.5px; line-height:1.7; max-width:600px}
 
-  .about-row{display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap}
-  .about-row .pic{width:150px; height:180px; border-radius:12px; overflow:hidden; flex:0 0 auto;
-    border:1px solid var(--line); background:rgba(10,18,20,.7); display:flex; align-items:center; justify-content:center}
-  .about-row .pic img{width:100%; height:100%; object-fit:cover}
-  .about-row .pic .ph{font-family:var(--serif); color:var(--muted); font-size:13px; text-align:center; padding:8px}
-  .about-row .txt{flex:1; min-width:220px}
+  footer{border-top:1px solid var(--line); padding:50px clamp(20px,6vw,90px) 60px; text-align:center}
+  footer .fname{font-family:var(--sans); font-weight:700; font-size:20px}
+  footer .flinks{display:flex; gap:22px; justify-content:center; margin:20px 0; font-family:var(--mono); font-size:13px}
+  footer .flinks a{text-decoration:none; color:var(--dim); transition:.2s}
+  footer .flinks a:hover{color:var(--amber)}
+  footer .fmeta{font-family:var(--mono); font-size:11.5px; color:var(--dim); opacity:.55}
 
-  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:4px}
-  @media(max-width:600px){.grid{grid-template-columns:1fr}}
-  .card{border:1px solid var(--line); border-radius:12px; padding:14px; background:rgba(8,16,18,.5); transition:.15s}
-  .card:hover{border-color:var(--green); transform:translateY(-2px)}
-  .card .nm{font-family:var(--serif); font-size:19px; color:var(--ink)}
-  .card .lg{color:var(--teal); font-size:12px; margin-left:8px}
-  .card p{font-size:14px; margin:8px 0 10px}
-  .card a{font-size:13px}
-
-  .cgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-  @media(max-width:600px){.cgrid{grid-template-columns:1fr}}
-  .cc{display:block; border:1px solid var(--line); border-radius:12px; padding:15px; background:rgba(8,16,18,.5); transition:.15s}
-  .cc:hover{border-color:var(--teal); transform:translateY(-2px)}
-  .cc .k{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:1.5px}
-  .cc .v{margin-top:6px; color:var(--ink)}
-
-  .audio{position:absolute; bottom:18px; right:20px; z-index:6; width:40px; height:40px; border-radius:50%;
-    border:1px solid var(--line); background:rgba(10,18,20,.6); color:var(--muted); cursor:pointer; font-size:16px}
-  .audio:hover{color:var(--green)}
-  .credit{position:absolute; bottom:20px; left:22px; z-index:6; color:var(--muted); font-family:var(--serif);
-    font-size:13px; opacity:.55; letter-spacing:.5px}
-  @media(prefers-reduced-motion:reduce){.center .cue{animation:none} .avatar::before{animation:none}}
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease}
+  .reveal.on{opacity:1; transform:translateY(0)}
 </style>
 </head>
 <body>
-<canvas id="aurora"></canvas>
-<canvas id="sky"></canvas>
-<div class="vignette"></div>
-<div class="grain"></div>
+<canvas id="net"></canvas>
 
-<div class="ui">
-  <nav>
-    <span class="brand"></span>
-    <span class="links">
-      <button data-panel="about">About</button>
-      <button data-panel="projects">Projects</button>
-      <button data-panel="contact">Contact</button>
-    </span>
-  </nav>
+<div class="wrap">
+  <header>
+    <span class="mark">jonah<span>.</span>dev</span>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-  <div class="avatar" id="avatar">
-    <img id="avimg" alt="Jonah" src="me.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-    <div class="ph" style="display:none">your photo<br>(me.jpg)</div>
-  </div>
+  <section class="hero">
+    <div class="avatar"><img src="me.jpg" alt="Jonah Novoseller"></div>
+    <div class="eyebrow">Winnipeg, Canada</div>
+    <h1>Jonah Novoseller</h1>
+    <div class="role">Nokia <b>Future Tech Intern</b> · Founder, <b>Mythofy</b> · 8&times; <b>national debater</b><br>
+      Rust, security &amp; hardware — I build things that run in production, not demos.</div>
+    <div class="cta">
+      <a class="btn primary" href="#projects">View projects</a>
+      <a class="btn ghost" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/jonah-novoseller" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="scrolldown">scroll ↓</div>
+  </section>
 
-  <div class="credit">Winnipeg, Canada</div>
-  <button class="audio" id="audioBtn" title="ambient sound">&#9834;</button>
-
-  <div class="scrim" id="scrim"></div>
-
-  <div class="panel" id="p-about">
-    <div class="ph"><h2>About</h2><button class="x" data-close>&times;</button></div>
-    <div class="pb"><div class="about-row">
-      <div class="pic"><img alt="Jonah" src="me.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">your photo<br>(me.jpg)</div></div>
-      <div class="txt">
-        <p>I'm a 16-year-old developer from Canada who ships real, production systems: web platforms, Minecraft plugins, payment infrastructure, and open-source security hardware. By day I'm a Future Tech Intern at Nokia; the rest of the time I build <a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy Inc.</a>, a company I founded.</p>
-        <p class="dim">Lately I'm deep in security, red teaming, and hardware, learning PCB design while building my own hardware security key. I'm also an 8&times; national debater and I mentor students in debate and public speaking.</p>
+  <section id="projects">
+    <div class="sec-inner">
+      <div class="kicker reveal">Selected work</div>
+      <h2 class="reveal">Projects</h2>
+      <div class="stats reveal">
+        <div class="stat"><div class="n">20</div><div class="l">public repos</div></div>
+        <div class="stat"><div class="n">16</div><div class="l">years old</div></div>
+        <div class="stat"><div class="n">8×</div><div class="l">national debater</div></div>
+        <div class="stat"><div class="n">2023</div><div class="l">building since</div></div>
       </div>
-    </div></div>
-  </div>
+      <div class="grid" style="margin-top:16px">
 
-  <div class="panel" id="p-projects">
-    <div class="ph"><h2>Projects</h2><button class="x" data-close>&times;</button></div>
-    <div class="pb"><div class="grid">
-      <div class="card"><div><span class="nm">blackbox</span><span class="lg">Rust</span></div><p>Flight recorder for terminal &amp; SSH sessions: record, replay, search, tamper-evident logs.</p><a href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">source →</a></div>
-      <div class="card"><div><span class="nm">Knox-Key</span><span class="lg">C · hw</span></div><p>Open-source USB-C hardware security key with a zero-trust architecture and secure element.</p><a href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">source →</a></div>
-      <div class="card"><div><span class="nm">Mythofy</span><span class="lg">Next.js</span></div><p>A platform of tools for creators and communities. The company I founded and lead.</p><a href="https://mythofy.net" target="_blank" rel="noopener">site →</a></div>
-      <div class="card"><div><span class="nm">Mythopay</span><span class="lg">Node</span></div><p>A Stripe Connect payment system for the Minecraft creator economy.</p><a href="https://mythopay.net" target="_blank" rel="noopener">site →</a></div>
-      <div class="card"><div><span class="nm">CombatGhost</span><span class="lg">Java</span></div><p>Anti-combat-log plugin with ghost NPCs on logout and WorldGuard integration.</p><a href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">source →</a></div>
-      <div class="card"><div><span class="nm">LaunchPads</span><span class="lg">Java</span></div><p>Configurable Minecraft launchpads: materials, velocities, cooldowns, synced pads.</p><a href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">source →</a></div>
-    </div></div>
-  </div>
+        <a class="card reveal" href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">blackbox</span></div>
+          <p>A black-box flight recorder for terminal &amp; SSH sessions — records and replays sessions for audit. Hash-chained tamper-evident logs, full-text search, CI-tested.</p>
+          <div class="lang"><span class="dot"></span>Rust</div>
+        </a>
 
-  <div class="panel" id="p-contact">
-    <div class="ph"><h2>Contact</h2><button class="x" data-close>&times;</button></div>
-    <div class="pb">
-      <p class="dim" style="margin-bottom:16px">Open to technical conversations and collaboration on security tools, creator platforms, and infrastructure.</p>
-      <div class="cgrid">
-        <a class="cc" href="https://www.linkedin.com/in/jonah-novoseller/" target="_blank" rel="noopener"><div class="k">LinkedIn</div><div class="v">in/jonah-novoseller</div></a>
-        <a class="cc" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener"><div class="k">GitHub</div><div class="v">@Kingdragoncat</div></a>
-        <div class="cc"><div class="k">Discord</div><div class="v">@kingdragoncat</div></div>
+        <a class="card reveal" href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">Knox-Key</span><span class="star">★ 5</span></div>
+          <p>High-performance, open-source hardware authenticator for secure digital identity and crypto operations. Zero-trust hardware architecture with a dedicated secure element, USB-C form factor.</p>
+          <div class="lang"><span class="dot"></span>C · hardware</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/ClusterCord" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">ClusterCord</span></div>
+          <p>Secure, open-source Discord-native Kubernetes management. Live terminal execs, RBAC templates, Helm integration, audit logs, and OTP verification for self-hosted clusters.</p>
+          <div class="lang"><span class="dot"></span>TypeScript</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/MotionKit" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">MotionKit</span></div>
+          <p>A modern, flexible animation and UI component library for React, built on Framer Motion.</p>
+          <div class="lang"><span class="dot"></span>TypeScript</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">CombatGhost</span></div>
+          <p>Minecraft plugin that prevents combat logging: tags players in combat, spawns ghost NPCs on logout via Citizens, and restricts protected WorldGuard regions while tagged.</p>
+          <div class="lang"><span class="dot"></span>Java</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">MLP</span></div>
+          <p>A lightweight Minecraft plugin that adds fully customizable launchpads — materials, velocities, cooldowns, synced pads.</p>
+          <div class="lang"><span class="dot"></span>Java</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/HackPad" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">HackPad</span></div>
+          <p>My wonderful RGB hackpad of doom and awesomeness — a custom macropad build, firmware and all.</p>
+          <div class="lang"><span class="dot"></span>HTML · hardware</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/myde-vps-agent" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">myde-vps-agent</span></div>
+          <p>Ultra-lightweight VPS monitoring agent for MyDE — minimal footprint, built for small self-hosted boxes.</p>
+          <div class="lang"><span class="dot"></span>JavaScript</div>
+        </a>
+
       </div>
     </div>
-  </div>
+  </section>
+
+  <section id="about">
+    <div class="sec-inner about">
+      <div class="kicker reveal">Who I am</div>
+      <h2 class="reveal">About</h2>
+      <p class="reveal">I'm a 16-year-old developer who builds web platforms, plugins, and payment systems. I'm the Future Tech Intern at Nokia, and I founded and run <a href="https://mythofy.net" target="_blank" rel="noopener" style="color:var(--amber); text-decoration:none">Mythofy</a>, a platform of tools for creators and communities.</p>
+      <p class="reveal">Lately I'm deep in security and hardware — <b style="color:var(--ink)">Knox Key</b> is my open-source hardware authenticator project, and <b style="color:var(--ink)">blackbox</b> is a Rust session-recording tool built for real audit trails. Outside of code, I'm an 8&times; national debater.</p>
+      <div class="tags reveal">
+        <span class="tag">Rust</span><span class="tag">TypeScript</span><span class="tag">Java</span>
+        <span class="tag">C</span><span class="tag">JavaScript</span><span class="tag">Security</span>
+        <span class="tag">Hardware</span><span class="tag">Kubernetes</span><span class="tag">Systems</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-inner">
+      <div class="kicker reveal">Where I've been</div>
+      <h2 class="reveal">Experience</h2>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="when">Present</div>
+          <h3>Future Tech Intern — Nokia</h3>
+          <p>Working on forward-looking technology as part of Nokia's internship program.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="when">Founder</div>
+          <h3>Mythofy</h3>
+          <p>Founded and lead Mythofy, a platform of tools for creators and communities, including a Stripe Connect payment system for the Minecraft creator economy.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="when">2023 — present</div>
+          <h3>Open source &amp; independent projects</h3>
+          <p>20 public repositories spanning Rust security tooling, hardware authenticators, Kubernetes management, and Minecraft server infrastructure.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="when">Ongoing</div>
+          <h3>Competitive debate</h3>
+          <p>8&times; national debater — competing and mentoring in debate and public speaking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="fname">Jonah Novoseller</div>
+    <div class="flinks">
+      <a href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/jonah-novoseller" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy</a>
+    </div>
+    <div class="fmeta">Winnipeg, Canada</div>
+  </footer>
 </div>
 
 <script>
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var A = document.getElementById('aurora'), S = document.getElementById('sky');
-  var ac = A.getContext('2d'), sc = S.getContext('2d');
-  var W, H, DPR = Math.min(window.devicePixelRatio||1, 2);
-  var nameFontPx=0, nameCX=0, nameCY=0;
-  var mx=0, my=0, pmx=0, pmy=0;
-
+  var cv = document.getElementById('net'), ctx = cv.getContext('2d');
+  var W,H,DPR=Math.min(window.devicePixelRatio||1,2), pts=[];
   function resize(){
-    W = window.innerWidth; H = window.innerHeight;
-    [A,S].forEach(function(cv){ cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px'; });
-    ac.setTransform(DPR,0,0,DPR,0,0); sc.setTransform(DPR,0,0,DPR,0,0);
-    computeNameBox(); buildForest();
+    W=window.innerWidth; H=window.innerHeight;
+    cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    var n=Math.round(W*H/26000);
+    pts=[];
+    for(var i=0;i<n;i++){ pts.push({x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-0.5)*0.12, vy:(Math.random()-0.5)*0.12}); }
   }
-
-  var stars = [], shooters = [];
-  function buildStars(){ stars=[]; var n=Math.round(W*H/6500);
-    for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
-
-  var ridge=[], pinesMid=[], pinesFront=[];
-  function buildPines(n, hFracBase, hFracVar, wrBase, wrVar, spread){
-    var arr=[], spacing=W/n, i, x;
-    for(i=0;i<n;i++){ x = i*spacing + (Math.random()-0.5)*spacing*spread;
-      arr.push({ x:x, hf:hFracBase + Math.random()*hFracVar, wr:wrBase + Math.random()*wrVar,
-        tiers: 4 + (Math.random()<0.45?1:0), lean:(Math.random()-0.5)*0.16, seed:Math.random()*10 }); }
-    return arr;
-  }
-  function buildForest(){
-    ridge=[]; var rn=16, i;
-    for(i=0;i<=rn;i++){ ridge.push(Math.random()*0.5+0.25); }
-    pinesMid = buildPines(Math.max(7,Math.round(W/58)), 0.15, 0.07, 0.20, 0.09, 0.7);
-    pinesFront = buildPines(Math.max(6,Math.round(W/78)), 0.29, 0.15, 0.22, 0.11, 0.55);
-  }
-  function drawTree(ctx, x, baseY, th, tw, tiers, lean){
-    var trunkW = tw*0.09, lx = lean*th;
-    ctx.moveTo(x-trunkW/2, baseY);
-    ctx.lineTo(x+trunkW/2, baseY);
-    ctx.lineTo(x+trunkW/2+lx*0.15, baseY-th*0.09);
-    ctx.lineTo(x-trunkW/2+lx*0.15, baseY-th*0.09);
-    ctx.closePath();
-    var usableH = th*0.94, k, frac0, frac1, tierTopY, tierBotY, halfW, midW, midY, sway;
-    for(k=0;k<tiers;k++){
-      frac0 = k/tiers; frac1 = (k+1)/tiers;
-      sway = lx*frac1;
-      tierTopY = baseY - usableH*frac1;
-      tierBotY = baseY - usableH*frac0*0.76;
-      halfW = (tw/2) * (1 - frac0*0.7);
-      midW = halfW*0.38;
-      midY = tierBotY - (tierBotY-tierTopY)*0.26;
-      ctx.moveTo(x+sway, tierTopY);
-      ctx.lineTo(x - halfW + sway*0.4, tierBotY);
-      ctx.lineTo(x - midW + sway*0.6, midY);
-      ctx.lineTo(x + sway*0.7, tierBotY - (tierBotY-tierTopY)*0.1);
-      ctx.lineTo(x + midW + sway*0.6, midY);
-      ctx.lineTo(x + halfW + sway*0.4, tierBotY);
-      ctx.closePath();
+  window.addEventListener('resize', resize); resize();
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    var i,j,p,q,dx,dy,d,link=120;
+    for(i=0;i<pts.length;i++){
+      p=pts[i]; p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1;
     }
-  }
-
-  var fontReady=false;
-  function computeNameBox(){
-    if(!fontReady) return;
-    sc.font='300px "Great Vibes"';
-    var wdt=sc.measureText('Jonah').width||1;
-    var targetW=Math.min(W*0.74, 820);
-    nameFontPx=300*targetW/wdt; nameCX=W/2; nameCY=H*0.4;
-  }
-
-  var curt=[{col:'70,225,150',sp:0.05,wl:0.6,amp:70,base:0.5,h:1.05},
-            {col:'80,205,215',sp:-0.035,wl:0.42,amp:95,base:0.55,h:1.05},
-            {col:'150,115,255',sp:0.025,wl:0.85,amp:55,base:0.42,h:0.95}];
-  function drawAurora(t){
-    ac.clearRect(0,0,W,H);
-    var bgw=ac.createLinearGradient(0,0,0,H);
-    bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
-    ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
-    ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
-    curt.forEach(function(b,bi){
-      var baseY=H*b.base + Math.sin(t*0.25+bi*1.7)*H*0.05 + pmy*H*0.012, ph=t*b.sp*3.4+bi+pmx*0.4, x, y;
-      ac.beginPath(); ac.moveTo(0, baseY);
-      for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
-      ac.lineTo(W, baseY-H*b.h); ac.lineTo(0, baseY-H*b.h); ac.closePath();
-      var g=ac.createLinearGradient(0, baseY-H*b.h, 0, baseY+40);
-      g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.17)'); g.addColorStop(1,'rgba('+b.col+',0)');
-      ac.fillStyle=g; ac.fill(); });
-    ac.filter='none'; ac.globalCompositeOperation='source-over';
-    if(nameFontPx){ ac.globalCompositeOperation='destination-out'; ac.fillStyle='#000';
-      ac.textAlign='center'; ac.textBaseline='middle'; ac.font=nameFontPx+'px "Great Vibes"';
-      ac.fillText('Jonah', nameCX, nameCY); ac.globalCompositeOperation='source-over'; }
-  }
-
-  function drawForest(){
-    var ry = H*0.85, rw = W/(ridge.length-1||1), i;
-    sc.beginPath(); sc.moveTo(0,H);
-    sc.lineTo(0, ry - ridge[0]*H*0.15);
-    for(i=0;i<ridge.length;i++){ sc.lineTo(i*rw + pmx*16, ry - ridge[i]*H*0.15 + pmy*4); }
-    sc.lineTo(W,H); sc.closePath();
-    var rg = sc.createLinearGradient(0, ry-H*0.15, 0, ry);
-    rg.addColorStop(0,'rgba(150,180,195,0.17)'); rg.addColorStop(1,'rgba(70,100,110,0.05)');
-    sc.fillStyle=rg; sc.fill();
-
-    var midY = H*0.905, midOff = pmx*38, midYOff = pmy*7;
-    sc.beginPath();
-    pinesMid.forEach(function(p){ drawTree(sc, p.x+midOff, midY+midYOff, H*p.hf, H*p.hf*p.wr, p.tiers, p.lean); });
-    sc.fillStyle='rgba(16,40,34,0.65)'; sc.fill();
-
-    var mistG = sc.createLinearGradient(0, H*0.87, 0, H*0.98);
-    mistG.addColorStop(0,'rgba(180,210,205,0)'); mistG.addColorStop(1,'rgba(180,210,205,0.13)');
-    sc.fillStyle=mistG; sc.fillRect(0,H*0.85,W,H*0.15);
-
-    var frontY = H*0.995, frontOff = pmx*90, frontYOff = pmy*16;
-    sc.beginPath();
-    pinesFront.forEach(function(p){ drawTree(sc, p.x+frontOff, frontY+frontYOff, H*p.hf, H*p.hf*p.wr, p.tiers, p.lean); });
-    sc.fillStyle='#040c08'; sc.fill();
-  }
-
-  var t0 = performance.now();
-  function frame(now){
-    requestAnimationFrame(frame);
-    var t=(now-t0)/1000, i;
-    pmx += (mx-pmx)*0.04; pmy += (my-pmy)*0.04;
-    drawAurora(t);
-    sc.clearRect(0,0,W,H);
-    for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.5+0.5*Math.sin(t*s.s*2.6+s.t);
-      var rr=s.r*(0.7+tw*0.6);
-      sc.globalAlpha=0.25+tw*0.75; sc.beginPath(); sc.arc(s.x,s.y,rr,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
-    sc.globalAlpha=1;
-    if(nameFontPx){ sc.globalCompositeOperation='destination-out'; sc.fillStyle='#000';
-      sc.textAlign='center'; sc.textBaseline='middle'; sc.font=nameFontPx+'px "Great Vibes"';
-      sc.fillText('Jonah', nameCX, nameCY); sc.globalCompositeOperation='source-over'; }
-    if(Math.random()<0.006 && shooters.length<3){ shooters.push({x:Math.random()*W*0.85, y:Math.random()*H*0.35, vx:7+Math.random()*6, vy:2.2+Math.random()*2.6, life:1}); }
-    sc.lineCap='round';
-    for(var q=shooters.length-1;q>=0;q--){ var sh=shooters[q]; sh.x+=sh.vx; sh.y+=sh.vy; sh.life-=0.014;
-      if(sh.life<=0||sh.x>W+60||sh.y>H+60){ shooters.splice(q,1); continue; }
-      var tx=sh.x-sh.vx*7, ty=sh.y-sh.vy*7, gg=sc.createLinearGradient(sh.x,sh.y,tx,ty);
-      gg.addColorStop(0,'rgba(255,255,255,'+(Math.min(1,sh.life)*0.9)+')'); gg.addColorStop(1,'rgba(255,255,255,0)');
-      sc.strokeStyle=gg; sc.lineWidth=2; sc.beginPath(); sc.moveTo(sh.x,sh.y); sc.lineTo(tx,ty); sc.stroke(); }
-    drawForest();
-  }
-
-  window.addEventListener('resize', function(){ resize(); buildStars(); });
-  window.addEventListener('mousemove', function(e){ mx=(e.clientX/W)*2-1; my=(e.clientY/H)*2-1; });
-  window.addEventListener('mouseleave', function(){ mx=0; my=0; });
-  resize(); buildStars();
-  function fontDone(){ fontReady=true; computeNameBox(); if(reduce){ t0=performance.now()-9000; frame(performance.now()); } }
-  if(document.fonts && document.fonts.load){ document.fonts.load('320px "Great Vibes"').then(fontDone); } else { fontDone(); }
-  if(reduce){ drawAurora(6); t0=performance.now()-9000; frame(performance.now()); } else { requestAnimationFrame(frame); }
-
-  var scrim=document.getElementById('scrim'), openP=null;
-  function openPanel(id){ closePanel(); openP=document.getElementById('p-'+id); if(!openP) return; scrim.classList.add('on'); openP.classList.add('on'); }
-  function closePanel(){ scrim.classList.remove('on'); if(openP){ openP.classList.remove('on'); openP=null; } }
-  document.querySelectorAll('[data-panel]').forEach(function(b){ b.onclick=function(){ openPanel(b.getAttribute('data-panel')); }; });
-  document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=closePanel; });
-  scrim.onclick=closePanel;
-  window.addEventListener('keydown', function(e){ if(e.key==='Escape') closePanel(); });
-
-  var actx=null, gain=null, on=false;
-  document.getElementById('audioBtn').onclick=function(){
-    if(!actx){
-      try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
-      gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination);
-      var filt=actx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=520; filt.connect(gain);
-      [110,164.81,220].forEach(function(f,i){ var o=actx.createOscillator(); o.type='sine'; o.frequency.value=f;
-        var og=actx.createGain(); og.gain.value=i===0?0.5:0.25; o.connect(og); og.connect(filt); o.start();
-        var lfo=actx.createOscillator(); lfo.frequency.value=0.05+i*0.03; var lg=actx.createGain(); lg.gain.value=6;
-        lfo.connect(lg); lg.connect(o.frequency); lfo.start(); });
+    ctx.lineWidth=1;
+    for(i=0;i<pts.length;i++){
+      p=pts[i];
+      for(j=i+1;j<pts.length;j++){
+        q=pts[j]; dx=p.x-q.x; dy=p.y-q.y; d=Math.sqrt(dx*dx+dy*dy);
+        if(d<link){ ctx.strokeStyle='rgba(232,163,61,'+(0.10*(1-d/link))+')'; ctx.beginPath();
+          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+      }
     }
-    if(actx.state==='suspended') actx.resume();
-    on=!on; gain.gain.setTargetAtTime(on?0.12:0, actx.currentTime, 0.6);
-    this.style.color = on ? 'var(--green)' : 'var(--muted)';
-    this.innerHTML = on ? '&#9835;' : '&#9834;';
-  };
+    ctx.fillStyle='rgba(232,163,61,0.55)';
+    for(i=0;i<pts.length;i++){ p=pts[i]; ctx.beginPath(); ctx.arc(p.x,p.y,1.4,0,6.2832); ctx.fill(); }
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  frame();
+
+  var els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+    }, {threshold:0.15});
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add('on'); });
+  }
 })();
 </script>
 </body>
