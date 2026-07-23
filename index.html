@@ -270,9 +270,8 @@
     drawAurora(t);
     sc.clearRect(0,0,W,H);
     for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.5+0.5*Math.sin(t*s.s*2.6+s.t);
-      s.x+=s.vx; if(s.x>W+2){ s.x=-2; } else if(s.x<-2){ s.x=W+2; }
-      var rr=s.r*(0.45+tw*1.15);
-      sc.globalAlpha=0.2+tw*0.8; sc.beginPath(); sc.arc(s.x,s.y,rr,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
+      var rr=s.r*(0.7+tw*0.6);
+      sc.globalAlpha=0.25+tw*0.75; sc.beginPath(); sc.arc(s.x,s.y,rr,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
     sc.globalAlpha=1;
     if(nameFontPx){ sc.globalCompositeOperation='destination-out'; sc.fillStyle='#000';
       sc.textAlign='center'; sc.textBaseline='middle'; sc.font=nameFontPx+'px "Great Vibes"';
