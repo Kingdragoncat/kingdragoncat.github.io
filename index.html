@@ -269,6 +269,12 @@
     var t=(now-t0)/1000, i;
     drawAurora(t);
     sc.clearRect(0,0,W,H);
+    for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.55+0.45*Math.sin(t*s.s+s.t);
+      sc.globalAlpha=tw*0.9; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
+    sc.globalAlpha=1;
+    if(nameFontPx){ sc.globalCompositeOperation='destination-out'; sc.fillStyle='#000';
+      sc.textAlign='center'; sc.textBaseline='middle'; sc.font=nameFontPx+'px "Great Vibes"';
+      sc.fillText('Jonah', nameCX, nameCY); sc.globalCompositeOperation='source-over'; }
     drawLand();
 
   }
