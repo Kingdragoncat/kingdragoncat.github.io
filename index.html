@@ -191,17 +191,43 @@
     for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
 
   var ridge=[], pinesMid=[], pinesFront=[];
-  function buildPines(n, hBase, hVar){
+  function buildPines(n, hFracBase, hFracVar, wrBase, wrVar, spread){
     var arr=[], spacing=W/n, i, x;
-    for(i=0;i<n;i++){ x = i*spacing + (Math.random()-0.5)*spacing*0.6;
-      arr.push({ x:x, h:hBase + Math.random()*hVar, w:0.55+Math.random()*0.5 }); }
+    for(i=0;i<n;i++){ x = i*spacing + (Math.random()-0.5)*spacing*spread;
+      arr.push({ x:x, hf:hFracBase + Math.random()*hFracVar, wr:wrBase + Math.random()*wrVar,
+        tiers: 4 + (Math.random()<0.45?1:0), lean:(Math.random()-0.5)*0.16, seed:Math.random()*10 }); }
     return arr;
   }
   function buildForest(){
-    ridge=[]; var rn=14, i;
+    ridge=[]; var rn=16, i;
     for(i=0;i<=rn;i++){ ridge.push(Math.random()*0.5+0.25); }
-    pinesMid = buildPines(Math.max(6,Math.round(W/50)), 0.45, 0.15);
-    pinesFront = buildPines(Math.max(6,Math.round(W/34)), 0.75, 0.35);
+    pinesMid = buildPines(Math.max(7,Math.round(W/58)), 0.15, 0.07, 0.20, 0.09, 0.7);
+    pinesFront = buildPines(Math.max(6,Math.round(W/78)), 0.29, 0.15, 0.22, 0.11, 0.55);
+  }
+  function drawTree(ctx, x, baseY, th, tw, tiers, lean){
+    var trunkW = tw*0.09, lx = lean*th;
+    ctx.moveTo(x-trunkW/2, baseY);
+    ctx.lineTo(x+trunkW/2, baseY);
+    ctx.lineTo(x+trunkW/2+lx*0.15, baseY-th*0.09);
+    ctx.lineTo(x-trunkW/2+lx*0.15, baseY-th*0.09);
+    ctx.closePath();
+    var usableH = th*0.94, k, frac0, frac1, tierTopY, tierBotY, halfW, midW, midY, sway;
+    for(k=0;k<tiers;k++){
+      frac0 = k/tiers; frac1 = (k+1)/tiers;
+      sway = lx*frac1;
+      tierTopY = baseY - usableH*frac1;
+      tierBotY = baseY - usableH*frac0*0.76;
+      halfW = (tw/2) * (1 - frac0*0.7);
+      midW = halfW*0.38;
+      midY = tierBotY - (tierBotY-tierTopY)*0.26;
+      ctx.moveTo(x+sway, tierTopY);
+      ctx.lineTo(x - halfW + sway*0.4, tierBotY);
+      ctx.lineTo(x - midW + sway*0.6, midY);
+      ctx.lineTo(x + sway*0.7, tierBotY - (tierBotY-tierTopY)*0.1);
+      ctx.lineTo(x + midW + sway*0.6, midY);
+      ctx.lineTo(x + halfW + sway*0.4, tierBotY);
+      ctx.closePath();
+    }
   }
 
   var fontReady=false;
@@ -236,46 +262,29 @@
       ac.fillText('Jonah', nameCX, nameCY); ac.globalCompositeOperation='source-over'; }
   }
 
-  function pineShape(ctx, x, baseY, h, w){
-    var tw = 40*w, th = 150*h;
-    ctx.moveTo(x, baseY);
-    ctx.lineTo(x - tw*0.5, baseY);
-    ctx.lineTo(x - tw*0.18, baseY - th*0.42);
-    ctx.lineTo(x - tw*0.34, baseY - th*0.42);
-    ctx.lineTo(x - tw*0.10, baseY - th*0.72);
-    ctx.lineTo(x - tw*0.22, baseY - th*0.72);
-    ctx.lineTo(x, baseY - th);
-    ctx.lineTo(x + tw*0.22, baseY - th*0.72);
-    ctx.lineTo(x + tw*0.10, baseY - th*0.72);
-    ctx.lineTo(x + tw*0.34, baseY - th*0.42);
-    ctx.lineTo(x + tw*0.18, baseY - th*0.42);
-    ctx.lineTo(x + tw*0.5, baseY);
-    ctx.closePath();
-  }
-
   function drawForest(){
-    var ry = H*0.86, rw = W/(ridge.length-1||1), i;
+    var ry = H*0.85, rw = W/(ridge.length-1||1), i;
     sc.beginPath(); sc.moveTo(0,H);
-    sc.lineTo(0, ry - ridge[0]*H*0.14);
-    for(i=0;i<ridge.length;i++){ sc.lineTo(i*rw + pmx*4, ry - ridge[i]*H*0.14); }
+    sc.lineTo(0, ry - ridge[0]*H*0.15);
+    for(i=0;i<ridge.length;i++){ sc.lineTo(i*rw + pmx*16, ry - ridge[i]*H*0.15 + pmy*4); }
     sc.lineTo(W,H); sc.closePath();
-    var rg = sc.createLinearGradient(0, ry-H*0.14, 0, ry);
-    rg.addColorStop(0,'rgba(150,180,195,0.16)'); rg.addColorStop(1,'rgba(70,100,110,0.05)');
+    var rg = sc.createLinearGradient(0, ry-H*0.15, 0, ry);
+    rg.addColorStop(0,'rgba(150,180,195,0.17)'); rg.addColorStop(1,'rgba(70,100,110,0.05)');
     sc.fillStyle=rg; sc.fill();
 
-    var midY = H*0.90, midOff = pmx*10;
+    var midY = H*0.905, midOff = pmx*38, midYOff = pmy*7;
     sc.beginPath();
-    pinesMid.forEach(function(p){ pineShape(sc, p.x+midOff, midY, p.h, p.w); });
-    sc.fillStyle='rgba(18,42,38,0.6)'; sc.fill();
+    pinesMid.forEach(function(p){ drawTree(sc, p.x+midOff, midY+midYOff, H*p.hf, H*p.hf*p.wr, p.tiers, p.lean); });
+    sc.fillStyle='rgba(16,40,34,0.65)'; sc.fill();
 
-    var mistG = sc.createLinearGradient(0, H*0.88, 0, H*0.98);
-    mistG.addColorStop(0,'rgba(180,210,205,0)'); mistG.addColorStop(1,'rgba(180,210,205,0.12)');
+    var mistG = sc.createLinearGradient(0, H*0.87, 0, H*0.98);
+    mistG.addColorStop(0,'rgba(180,210,205,0)'); mistG.addColorStop(1,'rgba(180,210,205,0.13)');
     sc.fillStyle=mistG; sc.fillRect(0,H*0.85,W,H*0.15);
 
-    var frontY = H*0.99, frontOff = pmx*22;
+    var frontY = H*0.995, frontOff = pmx*90, frontYOff = pmy*16;
     sc.beginPath();
-    pinesFront.forEach(function(p){ pineShape(sc, p.x+frontOff, frontY, p.h, p.w); });
-    sc.fillStyle='#050d0a'; sc.fill();
+    pinesFront.forEach(function(p){ drawTree(sc, p.x+frontOff, frontY+frontYOff, H*p.hf, H*p.hf*p.wr, p.tiers, p.lean); });
+    sc.fillStyle='#040c08'; sc.fill();
   }
 
   var t0 = performance.now();
