@@ -203,7 +203,7 @@
     var targetW=Math.min(W*0.6, 620), scale=targetW/bw, ox=(W-targetW)/2, oy=H*0.15;
     acc.sort(function(a,b){ return a[0]-b[0]; });
     acc.forEach(function(p,ix){ word.push({ x:ox+(p[0]-minx)*scale, y:oy+(p[1]-miny)*scale, t:Math.random()*6.28, appear:0.4+ix*0.013, mag:0.7+Math.pow(Math.random(),2.2)*1.25 }); });
-    var TH=D*3.0*scale, visited={}, count=0, total=word.length, ord=0; paths=[];
+    var TH=D*1.9*scale, visited={}, count=0, total=word.length, ord=0; paths=[];
     function nearest(idx){ var best=-1, bd=TH*TH, q;
       for(q=0;q<word.length;q++){ if(q===idx||visited[q]) continue;
         var dx=word[idx].x-word[q].x, dy=word[idx].y-word[q].y, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=q; } }
