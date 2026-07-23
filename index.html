@@ -3,236 +3,279 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>jonah@novoseller — terminal</title>
-<meta name="description" content="Jonah Novoseller (kingdragoncat) — 16-year-old developer. Interactive terminal portfolio. Security, Rust, hardware. Nokia intern, founder of Mythofy.">
-<meta property="og:title" content="jonah@novoseller — interactive terminal">
-<meta property="og:description" content="16-year-old developer building security tools, hardware, and platforms. Type 'help' to explore.">
+<title>Jonah Novoseller — Developer &amp; Founder</title>
+<meta name="description" content="Jonah Novoseller (kingdragoncat) — 16-year-old developer building security tools, hardware, and platforms. Nokia intern, founder of Mythofy, 8x national debater.">
+<meta property="og:title" content="Jonah Novoseller — Developer &amp; Founder">
+<meta property="og:description" content="16-year-old developer. Security, Rust, hardware. Nokia intern, founder of Mythofy.">
+<meta property="og:type" content="website">
 <style>
   :root{
-    --bg:#0a0e0d; --text:#c3d0cb; --green:#54e39a; --cyan:#4fd6e0;
-    --dim:#5f7168; --amber:#e5c07b; --red:#ff6b6b;
+    --bg:#080b10; --panel:rgba(15,21,30,.72); --line:#1d2836; --muted:#8395ab;
+    --text:#d9e3f0; --green:#54e39a; --cyan:#4fd6e0; --amber:#e5c07b;
     --mono: ui-monospace,"JetBrains Mono","SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--text);
-    font-family:var(--mono); font-size:15px; line-height:1.55;
-  }
-  body::before{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:5;
-    background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0, rgba(0,0,0,.16) 1px, transparent 1px, transparent 3px);
-    opacity:.35;
-  }
-  body::after{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:5;
-    background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.45) 100%);
-  }
-  #screen{
-    position:relative; z-index:1; height:100%; overflow-y:auto;
-    padding:22px clamp(14px,4vw,60px) 60px; cursor:text;
-  }
-  #out .row{white-space:pre-wrap; word-break:break-word}
-  .prompt{color:var(--green); text-shadow:0 0 8px rgba(84,227,154,.35)}
-  .sep{color:var(--text)} .path{color:var(--cyan)} .dollar{color:var(--dim)}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--mono); line-height:1.6}
   a{color:var(--cyan); text-decoration:none}
-  a:hover{text-decoration:underline; text-shadow:0 0 8px rgba(79,214,224,.4)}
-  .k{color:var(--green); cursor:pointer}
-  .k:hover{text-decoration:underline}
-  .err{color:var(--red)}
-  .amber{color:var(--amber)} .dim{color:var(--dim)} .green{color:var(--green)} .cyan{color:var(--cyan)}
-  b{color:#e8f0ec}
-  .logo{color:var(--green); text-shadow:0 0 10px rgba(84,227,154,.3)}
-  .spacer{height:8px}
+  a:hover{text-decoration:underline}
+  #bg{position:fixed; inset:0; z-index:0; display:block}
+  .content{position:relative; z-index:1}
+  .wrap{max-width:960px; margin:0 auto; padding:0 22px}
 
-  #line{display:flex; align-items:baseline; white-space:pre; margin-top:2px}
-  #cmd{
-    flex:1; background:transparent; border:0; outline:0; color:var(--text);
-    font:inherit; caret-color:transparent; padding:0; margin-left:8px; min-width:2ch;
-  }
-  #caret{
-    display:inline-block; width:9px; height:16px; background:var(--green);
-    transform:translateY(2px); animation:blink 1.05s steps(1) infinite;
-    box-shadow:0 0 8px rgba(84,227,154,.5);
-  }
+  nav{position:fixed; top:0; left:0; right:0; z-index:20; height:58px;
+    display:flex; align-items:center; backdrop-filter:blur(10px);
+    background:rgba(8,11,16,.6); border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; width:100%}
+  nav .logo{color:var(--green); font-weight:700}
+  nav .logo b{color:var(--text)}
+  nav .navlinks a{color:var(--muted); margin-left:20px; font-size:14px}
+  nav .navlinks a:hover{color:var(--text); text-decoration:none}
+  @media(max-width:560px){nav .navlinks a{margin-left:13px; font-size:13px}}
+
+  .win{background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden; box-shadow:0 24px 70px rgba(0,0,0,.45); backdrop-filter:blur(6px)}
+  .win .head{display:flex; align-items:center; gap:10px; padding:11px 15px;
+    border-bottom:1px solid var(--line); background:rgba(10,14,20,.6); font-size:12px; color:var(--muted)}
+  .win .head .tt{color:var(--green)}
+  .win .body{padding:22px}
+
+  .hero{min-height:100vh; display:flex; align-items:center; padding:90px 0 60px}
+  .hero .win{width:100%}
+  .type{white-space:pre-wrap; min-height:150px; font-size:15px}
+  .type .p{color:var(--green)} .type .o{color:var(--text)} .type .d{color:var(--muted)}
+  .cur{display:inline-block; width:9px; height:17px; background:var(--green);
+    vertical-align:-3px; animation:blink 1.05s steps(1) infinite; box-shadow:0 0 8px rgba(84,227,154,.5)}
   @keyframes blink{50%{opacity:0}}
-  .hint{color:var(--dim)}
-  ::selection{background:rgba(84,227,154,.28)}
-  #screen::-webkit-scrollbar{width:10px}
-  #screen::-webkit-scrollbar-thumb{background:#1c2a25; border-radius:6px}
+  h1{font-size:clamp(30px,6vw,46px); margin:22px 0 6px; letter-spacing:.5px}
+  h1 .hl{color:var(--green)}
+  .sub{color:var(--muted); margin:0 0 22px}
+  .cta{display:flex; flex-wrap:wrap; gap:11px}
+  .btn{border:1px solid var(--line); background:rgba(12,18,26,.7); color:var(--text);
+    padding:10px 18px; border-radius:9px; font-size:14px; transition:.15s}
+  .btn:hover{border-color:var(--green); color:var(--green); text-decoration:none; transform:translateY(-1px)}
+  .btn.primary{border-color:var(--green); color:var(--green)}
+
+  section{padding:90px 0}
+  .tag{color:var(--green); font-size:13px; letter-spacing:3px; text-transform:uppercase}
+  h2{font-size:24px; margin:8px 0 20px}
+  p.lead{color:var(--text); max-width:70ch}
+  .muted{color:var(--muted)}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; transition:.18s; backdrop-filter:blur(6px)}
+  .card:hover{border-color:var(--green); transform:translateY(-3px)}
+  .card .ch{display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; border-bottom:1px solid var(--line); background:rgba(10,14,20,.5); font-size:12px}
+  .card .ch .nm{color:var(--text); font-weight:700}
+  .card .ch .lg{color:var(--amber)}
+  .card .cb{padding:16px}
+  .card .cb p{margin:0 0 14px; color:var(--muted); font-size:14px}
+  .card .cb a{font-size:13px}
+
+  .contact-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  @media(max-width:640px){.contact-grid{grid-template-columns:1fr}}
+  .cc{display:block; background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:16px; backdrop-filter:blur(6px); transition:.15s}
+  .cc:hover{border-color:var(--cyan); text-decoration:none; transform:translateY(-2px)}
+  .cc .k{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:1px}
+  .cc .v{margin-top:5px; color:var(--text); word-break:break-all}
+
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1; transform:none}
+
+  footer{border-top:1px solid var(--line); padding:26px 0; color:var(--muted); font-size:13px; text-align:center}
+  @media(prefers-reduced-motion:reduce){.reveal{transition:none}}
 </style>
 </head>
 <body>
-<div id="screen">
-  <div id="out"></div>
-  <div id="line">
-    <span class="prompt">visitor@novoseller</span><span class="sep">:</span><span class="path">~</span><span class="dollar">$</span>
-    <input id="cmd" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="terminal input">
-    <span id="caret"></span>
-  </div>
+<canvas id="bg"></canvas>
+
+<div class="content">
+<nav><div class="wrap">
+  <span class="logo">~/<b>jonah</b></span>
+  <span class="navlinks">
+    <a href="#about">about</a>
+    <a href="#projects">projects</a>
+    <a href="#contact">contact</a>
+    <a href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">github</a>
+  </span>
+</div></nav>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="win">
+      <div class="head"><span class="tt">jonah@novoseller</span><span>: ~</span></div>
+      <div class="body">
+        <div class="type" id="type"></div>
+        <h1>Jonah <span class="hl">Novoseller</span></h1>
+        <p class="sub">16 y/o developer · Future Tech Intern @ Nokia · Founder of Mythofy · 8&times; national debater</p>
+        <div class="cta">
+          <a class="btn primary" href="#projects">View projects</a>
+          <a class="btn" href="#contact">Get in touch</a>
+          <a class="btn" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/jonah-novoseller/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" class="reveal">
+    <div class="tag">// about</div>
+    <h2>Who I am</h2>
+    <p class="lead">I'm a 16-year-old developer from Canada who ships real, production systems: web platforms, Minecraft plugins, payment infrastructure, and open-source security hardware. By day I'm a Future Tech Intern at Nokia; the rest of the time I build <a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy Inc.</a>, a company I founded.</p>
+    <p class="muted" style="max-width:70ch">Lately I'm deep in security, red teaming, and hardware, and learning PCB design while building my own hardware security key. Away from code I'm an 8&times; national debater and I mentor students in debate and public speaking, so I care about clear communication as much as clean code.</p>
+  </section>
+
+  <section id="projects" class="reveal">
+    <div class="tag">// projects</div>
+    <h2>Things I've built</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="ch"><span class="nm">blackbox</span><span class="lg">Rust</span></div>
+        <div class="cb"><p>A flight recorder for terminal &amp; SSH sessions: record, replay, full-text search, and tamper-evident hash-chained logs.</p>
+        <a href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">view source →</a></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="nm">Knox-Key</span><span class="lg">C · hardware</span></div>
+        <div class="cb"><p>An open-source USB-C hardware security key. Zero-trust architecture with a dedicated secure element for identity and crypto operations.</p>
+        <a href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">view source →</a></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="nm">Mythofy</span><span class="lg">Next.js</span></div>
+        <div class="cb"><p>A platform of tools for creators, developers, and communities. The company I founded and lead.</p>
+        <a href="https://mythofy.net" target="_blank" rel="noopener">visit site →</a></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="nm">Mythopay</span><span class="lg">Node · Stripe</span></div>
+        <div class="cb"><p>A Stripe Connect payment system built for the Minecraft creator economy.</p>
+        <a href="https://mythopay.net" target="_blank" rel="noopener">visit site →</a></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="nm">CombatGhost</span><span class="lg">Java</span></div>
+        <div class="cb"><p>Anti-combat-log Minecraft plugin: tags players in combat and spawns ghost NPCs on logout, with WorldGuard integration.</p>
+        <a href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">view source →</a></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="nm">MythofyLaunchPads</span><span class="lg">Java</span></div>
+        <div class="cb"><p>A lightweight plugin adding fully configurable launchpads: materials, velocities, cooldowns, and synced pads.</p>
+        <a href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">view source →</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <div class="tag">// contact</div>
+    <h2>Get in touch</h2>
+    <p class="muted" style="max-width:70ch">Open to interesting technical conversations and collaboration on security tools, creator platforms, and infrastructure.</p>
+    <div class="contact-grid">
+      <a class="cc" href="https://www.linkedin.com/in/jonah-novoseller/" target="_blank" rel="noopener"><div class="k">LinkedIn</div><div class="v">in/jonah-novoseller</div></a>
+      <a class="cc" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener"><div class="k">GitHub</div><div class="v">@Kingdragoncat</div></a>
+      <div class="cc"><div class="k">Discord</div><div class="v">@kingdragoncat</div></div>
+    </div>
+  </section>
+
 </div>
 
+<footer><div class="wrap">© <span id="yr"></span> Jonah Novoseller · built with a focus on shipping real systems</div></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
-  var out = document.getElementById('out');
-  var screen = document.getElementById('screen');
-  var input = document.getElementById('cmd');
-  var caret = document.getElementById('caret');
-  var history = [], hpos = -1;
-
-  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
-  function row(html){ var d=document.createElement('div'); d.className='row'; d.innerHTML=html; out.appendChild(d); }
-  function print(lines){ (Array.isArray(lines)?lines:[lines]).forEach(row); scroll(); }
-  function gap(){ var d=document.createElement('div'); d.className='spacer'; out.appendChild(d); }
-  function scroll(){ screen.scrollTop = screen.scrollHeight; }
-
-  function echo(cmd){
-    row('<span class="prompt">visitor@novoseller</span>:<span class="path">~</span><span class="dollar">$</span> ' + esc(cmd));
+  var seq = [
+    {t:'$ ', c:'p'}, {t:'whoami\n', c:'o'},
+    {t:'Jonah Novoseller (kingdragoncat)\n', c:'d'},
+    {t:'$ ', c:'p'}, {t:'cat about.txt\n', c:'o'},
+    {t:'security · rust · hardware · red teaming\n', c:'d'},
+    {t:'$ ', c:'p'}, {t:'ls projects/\n', c:'o'},
+    {t:'blackbox  knox-key  mythofy  mythopay  combatghost  mlp\n', c:'d'},
+    {t:'$ ', c:'p'}
+  ];
+  var el = document.getElementById('type');
+  var si=0, ci=0, cur='<span class="cur"></span>';
+  function tick(){
+    if(si>=seq.length){ el.innerHTML = build(seq.length,0)+cur; return; }
+    ci++;
+    if(ci>seq[si].t.length){ si++; ci=0; setTimeout(tick, 90); return; }
+    el.innerHTML = build(si, ci) + cur;
+    setTimeout(tick, 16 + Math.random()*26);
   }
-  function link(url, label){ return '<a href="'+url+'" target="_blank" rel="noopener">'+(label||url)+'</a>'; }
-  function cmdchip(name){ return '<span class="k" data-cmd="'+name+'">'+name+'</span>'; }
-
-  var projects = {
-    'blackbox': ['<b>blackbox</b>  <span class="amber">(Rust)</span>',
-      'A flight recorder for terminal &amp; SSH sessions: record, replay,',
-      'full-text search, and tamper-evident hash-chained logs.',
-      'repo: ' + link('https://github.com/Kingdragoncat/blackbox')],
-    'knox-key': ['<b>knox-key</b>  <span class="amber">(C)</span>',
-      'An open-source USB-C hardware security key. Zero-trust hardware',
-      'architecture with a dedicated secure element for identity + crypto.',
-      'repo: ' + link('https://github.com/Kingdragoncat/Knox-Key')],
-    'mythofy': ['<b>mythofy</b>  <span class="amber">(Next.js / TypeScript)</span>',
-      'A platform of tools for creators, developers, and communities.',
-      'The company I founded and lead.',
-      'site: ' + link('https://mythofy.net')],
-    'mythopay': ['<b>mythopay</b>  <span class="amber">(Node.js / Stripe Connect)</span>',
-      'A Stripe Connect payment system for the Minecraft creator economy.',
-      'site: ' + link('https://mythopay.net')],
-    'combatghost': ['<b>combatghost</b>  <span class="amber">(Java)</span>',
-      'Anti-combat-log Minecraft plugin: tags players in combat and spawns',
-      'ghost NPCs on logout, with WorldGuard region integration.',
-      'repo: ' + link('https://github.com/Kingdragoncat/CombatGhost')],
-    'mlp': ['<b>mlp</b> — MythofyLaunchPads  <span class="amber">(Java)</span>',
-      'A lightweight plugin adding configurable launchpads: materials,',
-      'velocities, cooldowns, and synced pads.',
-      'repo: ' + link('https://github.com/Kingdragoncat/MLP')]
-  };
-
-  var commands = {
-    help: function(){ return [
-      '<span class="green">available commands</span>',
-      '  ' + cmdchip('about') + '        who I am',
-      '  ' + cmdchip('projects') + '     things I have built',
-      '  ' + cmdchip('skills') + '       my tech stack',
-      '  ' + cmdchip('experience') + '   where I work and study',
-      '  ' + cmdchip('contact') + '      how to reach me',
-      '  ' + cmdchip('neofetch') + '     system info',
-      '  ' + cmdchip('clear') + '        clear the screen',
-      '<span class="hint">tip: Tab autocompletes, up/down cycles history. try a project name too, e.g. ' + cmdchip('blackbox') + '</span>'
-    ]; },
-    about: function(){ return [
-      '<b>Jonah Novoseller</b> <span class="dim">(kingdragoncat)</span>',
-      '16 y/o full-stack developer from Canada.',
-      'Future Tech Intern @ Nokia. Founder of Mythofy Inc.',
-      'Into security, red teaming, Rust, hardware, and secure terminals.',
-      '8x national debater; I mentor students in debate and public speaking.',
-      '',
-      'Type ' + cmdchip('projects') + ' to see what I have built.'
-    ]; },
-    projects: function(){ return [
-      '<span class="green">projects</span> <span class="hint">(type a name for details)</span>',
-      '  ' + cmdchip('blackbox') + '      <span class="dim">Rust  · tamper-evident terminal/SSH recorder</span>',
-      '  ' + cmdchip('knox-key') + '      <span class="dim">C     · open-source USB-C hardware key</span>',
-      '  ' + cmdchip('mythofy') + '       <span class="dim">TS    · platform for creators</span>',
-      '  ' + cmdchip('mythopay') + '      <span class="dim">Node  · Stripe payments for Minecraft</span>',
-      '  ' + cmdchip('combatghost') + '   <span class="dim">Java  · anti-combat-log plugin</span>',
-      '  ' + cmdchip('mlp') + '           <span class="dim">Java  · configurable launchpads</span>'
-    ]; },
-    skills: function(){ return [
-      '<span class="cyan">languages</span>   Rust · TypeScript · JavaScript · Java · Python · C',
-      '<span class="cyan">frontend</span>    React · Next.js · Tailwind',
-      '<span class="cyan">backend</span>     Node.js · Express · REST · Stripe Connect',
-      '<span class="cyan">systems</span>     Linux · Docker · Kubernetes · CI/CD',
-      '<span class="cyan">security</span>    red teaming · secure terminals · hardware auth'
-    ]; },
-    experience: function(){ return [
-      '<b>Nokia</b>          Future Tech Intern           <span class="dim">2025 - present</span>',
-      '<b>Mythofy Inc.</b>   Founder &amp; full-stack dev',
-      '<b>Debate</b>         8x national debater &amp; mentor'
-    ]; },
-    contact: function(){ return [
-      '<span class="green">get in touch</span>',
-      '  LinkedIn   ' + link('https://www.linkedin.com/in/jonah-novoseller/','in/jonah-novoseller'),
-      '  GitHub     ' + link('https://github.com/Kingdragoncat','@Kingdragoncat'),
-      '  Discord    @kingdragoncat',
-      '  Email      <span class="dim">jonah@novoseller.com (coming soon)</span>'
-    ]; },
-    social: function(){ return commands.contact(); },
-    neofetch: function(){ return [
-      '<span class="logo">     .-----.     </span>   <b>jonah</b>@<b>novoseller</b>',
-      '<span class="logo">    ( o   o )    </span>   <span class="dim">-------------------</span>',
-      '<span class="logo">     )  ^  (     </span>   <span class="cyan">os</span>      shipping real systems',
-      '<span class="logo">    ( ~~~~~ )    </span>   <span class="cyan">host</span>    novoseller.com',
-      '<span class="logo">     `-----`     </span>   <span class="cyan">uptime</span>  16 years',
-      '                       <span class="cyan">shell</span>   zsh',
-      '                       <span class="cyan">langs</span>   rust, ts, java, c',
-      '                       <span class="cyan">focus</span>   security · hardware · red team'
-    ]; },
-    whoami: function(){ return ['jonah <span class="dim">(kingdragoncat)</span>']; },
-    ls: function(){ return commands.projects(); },
-    sudo: function(){ return ['<span class="err">Permission denied.</span> nice try <span class="dim">;)</span>']; },
-    hire: function(){ return ['always open to interesting opportunities — type ' + cmdchip('contact') + ' :)']; },
-    clear: function(){ out.innerHTML=''; return []; }
-  };
-
-  function runLine(raw){
-    var parts = raw.trim().split(/\s+/);
-    var name = (parts[0]||'').toLowerCase();
-    echo(raw);
-    if(!name){ return; }
-    if(commands[name]){ print(commands[name](parts.slice(1))); }
-    else if(projects[name]){ print(projects[name]); }
-    else { print('<span class="err">command not found: ' + esc(name) + '</span> — type ' + cmdchip('help')); }
-    gap();
+  function build(upto, partial){
+    var s='';
+    for(var i=0;i<upto;i++){ s += '<span class="'+seq[i].c+'">'+esc(seq[i].t)+'</span>'; }
+    if(partial>0 && upto<seq.length){ s += '<span class="'+seq[upto].c+'">'+esc(seq[upto].t.slice(0,partial))+'</span>'; }
+    return s;
   }
+  function esc(x){ return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  setTimeout(tick, 400);
 
-  function complete(){
-    var val = input.value.trim().toLowerCase();
-    if(!val) return;
-    var names = Object.keys(commands).concat(Object.keys(projects));
-    var m = names.filter(function(n){ return n.indexOf(val)===0; });
-    if(m.length===1){ input.value = m[0]; }
-    else if(m.length>1){ echo(input.value); print('<span class="dim">'+m.join('   ')+'</span>'); gap(); }
-  }
+  document.getElementById('yr').textContent = new Date().getFullYear();
 
-  input.addEventListener('keydown', function(e){
-    if(e.key==='Enter'){
-      var v = input.value; input.value='';
-      if(v.trim()){ history.unshift(v); }
-      hpos = -1; runLine(v);
-    } else if(e.key==='Tab'){ e.preventDefault(); complete(); }
-    else if(e.key==='ArrowUp'){ e.preventDefault(); if(hpos<history.length-1){ hpos++; input.value=history[hpos]; } }
-    else if(e.key==='ArrowDown'){ e.preventDefault(); if(hpos>0){ hpos--; input.value=history[hpos]; } else { hpos=-1; input.value=''; } }
-    else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='l'){ e.preventDefault(); out.innerHTML=''; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(s){ io.observe(s); });
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(typeof THREE === 'undefined') return;
+  var canvas = document.getElementById('bg');
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 18;
+
+  var N = 900, pos = new Float32Array(N*3);
+  for(var i=0;i<N*3;i++){ pos[i] = (Math.random()-0.5)*60; }
+  var pg = new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  var pm = new THREE.PointsMaterial({color:0x54e39a, size:0.08, transparent:true, opacity:.75});
+  var points = new THREE.Points(pg, pm);
+  scene.add(points);
+
+  var geo = new THREE.IcosahedronGeometry(7, 1);
+  var wf = new THREE.WireframeGeometry(geo);
+  var mesh = new THREE.LineSegments(wf, new THREE.LineBasicMaterial({color:0x1f6f5c, transparent:true, opacity:.5}));
+  scene.add(mesh);
+
+  var mx=0, my=0, sy=0;
+  window.addEventListener('mousemove', function(e){
+    mx = (e.clientX/window.innerWidth - 0.5);
+    my = (e.clientY/window.innerHeight - 0.5);
   });
+  window.addEventListener('scroll', function(){ sy = window.scrollY || 0; });
 
-  document.addEventListener('click', function(e){
-    var t = e.target.closest('[data-cmd]');
-    if(t){ runLine(t.getAttribute('data-cmd')); input.focus(); }
-    else { input.focus(); }
-  });
-
-  function boot(){
-    print([
-      '<span class="dim">booting novoseller.dev ...</span>',
-      '<span class="green">ok</span> <span class="dim">welcome. this is an interactive terminal.</span>'
-    ]);
-    gap();
-    setTimeout(function(){ echo('whoami'); print(commands.about()); gap();
-      print('<span class="hint">type ' + cmdchip('help') + ' to see everything.</span>'); gap(); scroll(); input.focus(); }, 550);
+  function resize(){
+    var w=window.innerWidth, h=window.innerHeight;
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
   }
-  boot();
-  input.focus();
+  window.addEventListener('resize', resize); resize();
+
+  function loop(){
+    requestAnimationFrame(loop);
+    var t = Date.now()*0.0001;
+    mesh.rotation.x = t*1.4; mesh.rotation.y = t*1.9;
+    points.rotation.y = t*0.8;
+    var tz = 18 - Math.min(sy,1400)*0.004;
+    camera.position.x += (mx*4 - camera.position.x)*0.04;
+    camera.position.y += (-my*4 - camera.position.y)*0.04;
+    camera.position.z += (tz - camera.position.z)*0.05;
+    camera.lookAt(0,0,0);
+    renderer.render(scene, camera);
+  }
+  if(reduce){ renderer.render(scene, camera); } else { loop(); }
 })();
 </script>
 </body>
