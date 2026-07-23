@@ -173,7 +173,7 @@
 
   var stars = [];
   function buildStars(){ stars=[]; var n=Math.round(W*H/6500);
-    for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
+    for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random(), vx:(0.08+Math.random()*0.24)*(Math.random()<0.5?-1:1)}); } }
 
   var snow = [];
   function buildSnow(){ snow=[]; var n=Math.round(W*H/16000);
@@ -238,7 +238,7 @@
     bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
     ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
     ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
-    curt.forEach(function(b,bi){ var baseY=H*b.base, ph=t*b.sp+bi, x, y;
+    curt.forEach(function(b,bi){ var baseY=H*b.base + Math.sin(t*0.25+bi*1.7)*H*0.05, ph=t*b.sp*3.4+bi, x, y;
       ac.beginPath(); ac.moveTo(0, baseY);
       for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
       ac.lineTo(W, baseY-H*b.h); ac.lineTo(0, baseY-H*b.h); ac.closePath();
@@ -269,8 +269,9 @@
     var t=(now-t0)/1000, i;
     drawAurora(t);
     sc.clearRect(0,0,W,H);
-    for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.55+0.45*Math.sin(t*s.s+s.t);
-      sc.globalAlpha=tw*0.9; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
+    for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.4+0.6*Math.sin(t*s.s+s.t);
+      s.x+=s.vx; if(s.x>W+2){ s.x=-2; } else if(s.x<-2){ s.x=W+2; }
+      sc.globalAlpha=Math.max(0,tw)*0.95; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
     sc.globalAlpha=1;
     if(nameFontPx){ sc.globalCompositeOperation='destination-out'; sc.fillStyle='#000';
       sc.textAlign='center'; sc.textBaseline='middle'; sc.font=nameFontPx+'px "Great Vibes"';
