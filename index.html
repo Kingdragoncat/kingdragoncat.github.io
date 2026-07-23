@@ -21,7 +21,7 @@
   html,body{height:100%; margin:0}
   body{background:#04070b; color:var(--ink); font-family:var(--sans); overflow:hidden}
   canvas{position:fixed; inset:0; display:block}
-  #aurora{z-index:0; filter:blur(7px) saturate(1.25); opacity:.95; mix-blend-mode:screen}
+  #aurora{z-index:0; filter:saturate(1.25); opacity:.95; mix-blend-mode:screen}
   #sky{z-index:1}
   a{color:var(--teal); text-decoration:none}
 
@@ -238,7 +238,7 @@
     var bgw=ac.createLinearGradient(0,0,0,H);
     bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
     ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
-    ac.globalCompositeOperation='lighter';
+    ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
     curt.forEach(function(b,bi){ var baseY=H*b.base, ph=t*b.sp+bi, x, y;
       ac.beginPath(); ac.moveTo(0, baseY);
       for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
@@ -246,7 +246,7 @@
       var g=ac.createLinearGradient(0, baseY-H*b.h, 0, baseY+40);
       g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.17)'); g.addColorStop(1,'rgba('+b.col+',0)');
       ac.fillStyle=g; ac.fill(); });
-    ac.globalCompositeOperation='source-over';
+    ac.filter='none'; ac.globalCompositeOperation='source-over';
     if(nameFontPx){ ac.globalCompositeOperation='destination-out'; ac.fillStyle='#000';
       ac.textAlign='center'; ac.textBaseline='middle'; ac.font=nameFontPx+'px "Great Vibes"';
       ac.fillText('Jonah', nameCX, nameCY); ac.globalCompositeOperation='source-over'; }
@@ -270,9 +270,6 @@
     var t=(now-t0)/1000, i;
     drawAurora(t);
     sc.clearRect(0,0,W,H);
-    for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.55+0.45*Math.sin(t*s.s+s.t);
-      sc.globalAlpha=tw*0.9; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
-    sc.globalAlpha=1;
     drawLand();
 
   }
