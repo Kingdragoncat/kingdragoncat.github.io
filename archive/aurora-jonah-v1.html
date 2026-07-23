@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonah Novoseller</title>
+<meta name="description" content="Jonah Novoseller — 16-year-old developer. Security, Rust, hardware. Nokia intern, founder of Mythofy, 8x national debater.">
+<meta property="og:title" content="Jonah Novoseller">
+<meta property="og:description" content="16-year-old developer. Written in the stars.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#eaf2ee; --muted:#9fb4b0; --green:#7ef0b6; --teal:#63d8d0; --violet:#b79bff;
+    --panel:rgba(12,22,24,.62); --line:rgba(126,240,182,.28);
+    --serif:"Cormorant Garamond", Georgia, serif; --script:"Great Vibes", cursive; --sans:"Inter", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0}
+  body{background:#04070b; color:var(--ink); font-family:var(--sans); overflow:hidden}
+  canvas{position:fixed; inset:0; display:block}
+  #aurora{z-index:0; filter:blur(34px) saturate(1.2); opacity:.85; mix-blend-mode:screen}
+  #sky{z-index:1}
+  a{color:var(--teal); text-decoration:none}
+
+  .ui{position:fixed; inset:0; z-index:5; pointer-events:none}
+  .ui > *{pointer-events:auto}
+
+  nav{position:absolute; top:0; left:0; right:0; height:64px; display:flex; align-items:center;
+    justify-content:space-between; padding:0 clamp(18px,4vw,46px)}
+  nav .brand{font-family:var(--script); font-size:26px; color:var(--ink); text-shadow:0 0 18px rgba(126,240,182,.5)}
+  nav .links button{background:none; border:0; color:var(--muted); font-family:var(--serif); font-size:19px;
+    letter-spacing:.5px; margin-left:24px; cursor:pointer; transition:.2s}
+  nav .links button:hover{color:var(--green); text-shadow:0 0 14px rgba(126,240,182,.5)}
+  @media(max-width:520px){nav .links button{margin-left:15px; font-size:17px}}
+
+  .center{position:absolute; left:0; right:0; top:56%; text-align:center; padding:0 20px}
+  .center .sig{font-family:var(--script); font-size:clamp(30px,6vw,52px); color:var(--ink);
+    text-shadow:0 0 24px rgba(126,240,182,.45); line-height:1}
+  .center .role{font-family:var(--serif); font-style:italic; font-size:clamp(15px,2.6vw,20px);
+    color:var(--muted); margin-top:8px; letter-spacing:1px}
+  .center .cue{margin-top:22px; font-family:var(--serif); font-size:15px; color:var(--muted); opacity:.8;
+    animation:pulse 3s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+
+  .avatar{position:absolute; left:50%; top:34%; transform:translate(-50%,-50%); width:96px; height:96px;
+    border-radius:50%; overflow:hidden; border:1px solid var(--line); box-shadow:0 0 30px rgba(126,240,182,.35);
+    background:rgba(10,18,20,.7); display:none; align-items:center; justify-content:center}
+  .avatar img{width:100%; height:100%; object-fit:cover; display:block}
+  .avatar .ph{font-family:var(--serif); font-size:12px; color:var(--muted); text-align:center; padding:6px}
+
+  .scrim{position:absolute; inset:0; background:rgba(3,6,10,.5); backdrop-filter:blur(3px);
+    opacity:0; visibility:hidden; transition:.35s; z-index:6}
+  .scrim.on{opacity:1; visibility:visible}
+  .panel{position:absolute; left:50%; top:50%; transform:translate(-50%,-46%) scale(.98);
+    width:min(760px,92vw); max-height:82vh; overflow:auto; background:var(--panel); border:1px solid var(--line);
+    border-radius:18px; backdrop-filter:blur(14px); box-shadow:0 30px 90px rgba(0,0,0,.55);
+    opacity:0; visibility:hidden; transition:.35s; z-index:7}
+  .panel.on{opacity:1; visibility:visible; transform:translate(-50%,-50%) scale(1)}
+  .panel .ph{display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid var(--line)}
+  .panel .ph h2{font-family:var(--serif); font-weight:600; font-size:26px; margin:0; color:var(--ink)}
+  .panel .ph .x{background:none; border:0; color:var(--muted); font-size:22px; cursor:pointer; line-height:1}
+  .panel .pb{padding:22px}
+  .panel p{color:#cfe0da; line-height:1.7; margin:0 0 12px}
+  .panel .dim{color:var(--muted)}
+
+  .about-row{display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap}
+  .about-row .pic{width:150px; height:180px; border-radius:12px; overflow:hidden; flex:0 0 auto;
+    border:1px solid var(--line); background:rgba(10,18,20,.7); display:flex; align-items:center; justify-content:center}
+  .about-row .pic img{width:100%; height:100%; object-fit:cover}
+  .about-row .pic .ph{font-family:var(--serif); color:var(--muted); font-size:13px; text-align:center; padding:8px}
+  .about-row .txt{flex:1; min-width:220px}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:4px}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line); border-radius:12px; padding:14px; background:rgba(8,16,18,.5); transition:.15s}
+  .card:hover{border-color:var(--green); transform:translateY(-2px)}
+  .card .nm{font-family:var(--serif); font-size:19px; color:var(--ink)}
+  .card .lg{color:var(--teal); font-size:12px; margin-left:8px}
+  .card p{font-size:14px; margin:8px 0 10px}
+  .card a{font-size:13px}
+
+  .cgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  @media(max-width:600px){.cgrid{grid-template-columns:1fr}}
+  .cc{display:block; border:1px solid var(--line); border-radius:12px; padding:15px; background:rgba(8,16,18,.5); transition:.15s}
+  .cc:hover{border-color:var(--teal); transform:translateY(-2px)}
+  .cc .k{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:1.5px}
+  .cc .v{margin-top:6px; color:var(--ink)}
+
+  .audio{position:absolute; bottom:18px; right:20px; z-index:6; width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--line); background:rgba(10,18,20,.6); color:var(--muted); cursor:pointer; font-size:16px}
+  .audio:hover{color:var(--green)}
+  .credit{position:absolute; bottom:20px; left:22px; z-index:6; color:var(--muted); font-family:var(--serif);
+    font-size:13px; opacity:.6}
+  @media(prefers-reduced-motion:reduce){.center .cue{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="aurora"></canvas>
+<canvas id="sky"></canvas>
+
+<div class="ui">
+  <nav>
+    <span class="brand">Jonah</span>
+    <span class="links">
+      <button data-panel="about">About</button>
+      <button data-panel="projects">Projects</button>
+      <button data-panel="contact">Contact</button>
+    </span>
+  </nav>
+
+  <div class="avatar" id="avatar">
+    <img id="avimg" alt="Jonah" src="me.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div class="ph" style="display:none">your photo<br>(me.jpg)</div>
+  </div>
+
+  <button class="audio" id="audioBtn" title="ambient sound">&#9834;</button>
+  <div class="credit">written in the stars</div>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div class="panel" id="p-about">
+    <div class="ph"><h2>About</h2><button class="x" data-close>&times;</button></div>
+    <div class="pb"><div class="about-row">
+      <div class="pic"><img alt="Jonah" src="me.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">your photo<br>(me.jpg)</div></div>
+      <div class="txt">
+        <p>I'm a 16-year-old developer from Canada who ships real, production systems: web platforms, Minecraft plugins, payment infrastructure, and open-source security hardware. By day I'm a Future Tech Intern at Nokia; the rest of the time I build <a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy Inc.</a>, a company I founded.</p>
+        <p class="dim">Lately I'm deep in security, red teaming, and hardware, learning PCB design while building my own hardware security key. I'm also an 8&times; national debater and I mentor students in debate and public speaking.</p>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="panel" id="p-projects">
+    <div class="ph"><h2>Projects</h2><button class="x" data-close>&times;</button></div>
+    <div class="pb"><div class="grid">
+      <div class="card"><div><span class="nm">blackbox</span><span class="lg">Rust</span></div><p>Flight recorder for terminal &amp; SSH sessions: record, replay, search, tamper-evident logs.</p><a href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">source →</a></div>
+      <div class="card"><div><span class="nm">Knox-Key</span><span class="lg">C · hw</span></div><p>Open-source USB-C hardware security key with a zero-trust architecture and secure element.</p><a href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">source →</a></div>
+      <div class="card"><div><span class="nm">Mythofy</span><span class="lg">Next.js</span></div><p>A platform of tools for creators and communities. The company I founded and lead.</p><a href="https://mythofy.net" target="_blank" rel="noopener">site →</a></div>
+      <div class="card"><div><span class="nm">Mythopay</span><span class="lg">Node</span></div><p>A Stripe Connect payment system for the Minecraft creator economy.</p><a href="https://mythopay.net" target="_blank" rel="noopener">site →</a></div>
+      <div class="card"><div><span class="nm">CombatGhost</span><span class="lg">Java</span></div><p>Anti-combat-log plugin with ghost NPCs on logout and WorldGuard integration.</p><a href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">source →</a></div>
+      <div class="card"><div><span class="nm">LaunchPads</span><span class="lg">Java</span></div><p>Configurable Minecraft launchpads: materials, velocities, cooldowns, synced pads.</p><a href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">source →</a></div>
+    </div></div>
+  </div>
+
+  <div class="panel" id="p-contact">
+    <div class="ph"><h2>Contact</h2><button class="x" data-close>&times;</button></div>
+    <div class="pb">
+      <p class="dim" style="margin-bottom:16px">Open to technical conversations and collaboration on security tools, creator platforms, and infrastructure.</p>
+      <div class="cgrid">
+        <a class="cc" href="https://www.linkedin.com/in/jonah-novoseller/" target="_blank" rel="noopener"><div class="k">LinkedIn</div><div class="v">in/jonah-novoseller</div></a>
+        <a class="cc" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener"><div class="k">GitHub</div><div class="v">@Kingdragoncat</div></a>
+        <div class="cc"><div class="k">Discord</div><div class="v">@kingdragoncat</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var A = document.getElementById('aurora'), S = document.getElementById('sky');
+  var ac = A.getContext('2d'), sc = S.getContext('2d');
+  var W, H, DPR = Math.min(window.devicePixelRatio||1, 2);
+
+  function resize(){
+    W = window.innerWidth; H = window.innerHeight;
+    [A,S].forEach(function(cv){ cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px'; });
+    ac.setTransform(DPR,0,0,DPR,0,0); sc.setTransform(DPR,0,0,DPR,0,0);
+    buildConstellation();
+  }
+
+  var stars = [];
+  function buildStars(){ stars=[]; var n=Math.round(W*H/6500);
+    for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
+
+  var snow = [];
+  function buildSnow(){ snow=[]; var n=Math.round(W*H/16000);
+    for(var i=0;i<n;i++){ snow.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*2+0.6, sp:8+Math.random()*22, dr:Math.random()*0.6-0.3, ph:Math.random()*6.28}); } }
+
+  var word = [], edges = [], fontReady = false;
+  function buildConstellation(){
+    word=[]; edges=[]; if(!fontReady) return;
+    var off=document.createElement('canvas'); off.width=1400; off.height=460;
+    var oc=off.getContext('2d');
+    oc.clearRect(0,0,off.width,off.height);
+    oc.fillStyle='#fff'; oc.textAlign='center'; oc.textBaseline='middle';
+    oc.font='320px "Great Vibes"';
+    var fw=oc.measureText('Jonah').width; var fs=320*Math.min(1,(off.width*0.86)/fw);
+    oc.font=fs+'px "Great Vibes"';
+    oc.fillText('Jonah', off.width/2, off.height/2);
+    var img=oc.getImageData(0,0,off.width,off.height).data, pts=[], x, y, i, j;
+    for(y=0;y<off.height;y+=3){ for(x=0;x<off.width;x+=3){ if(img[(y*off.width+x)*4+3]>128) pts.push([x,y]); } }
+    var D=13, acc=[];
+    for(i=0;i<pts.length;i++){ var p=pts[i], ok=true;
+      for(j=0;j<acc.length;j++){ var ax=p[0]-acc[j][0], ay=p[1]-acc[j][1]; if(ax*ax+ay*ay<D*D){ ok=false; break; } }
+      if(ok) acc.push(p); }
+    if(!acc.length) return;
+    var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
+    acc.forEach(function(p){ if(p[0]<minx)minx=p[0]; if(p[0]>maxx)maxx=p[0]; if(p[1]<miny)miny=p[1]; if(p[1]>maxy)maxy=p[1]; });
+    var bw=(maxx-minx)||1, bh=(maxy-miny)||1;
+    var targetW=Math.min(W*0.6, 620), scale=targetW/bw, ox=(W-targetW)/2, oy=H*0.15;
+    acc.sort(function(a,b){ return a[0]-b[0]; });
+    acc.forEach(function(p,ix){ word.push({ x:ox+(p[0]-minx)*scale, y:oy+(p[1]-miny)*scale, t:Math.random()*6.28, appear:0.4+ix*0.010 }); });
+    var TH=D*2.2*scale, eset={};
+    for(i=0;i<word.length;i++){ var cand=[];
+      for(j=0;j<word.length;j++){ if(j===i) continue; var dx=word[i].x-word[j].x, dy=word[i].y-word[j].y, d=dx*dx+dy*dy; if(d<TH*TH) cand.push([d,j]); }
+      cand.sort(function(a,b){ return a[0]-b[0]; });
+      for(var k=0;k<Math.min(2,cand.length);k++){ var jj=cand[k][1], lo=Math.min(i,jj), hi=Math.max(i,jj), key=lo+'_'+hi;
+        if(!eset[key]){ eset[key]=1; edges.push({ a:lo, b:hi, start:Math.max(word[lo].appear,word[hi].appear)+0.12 }); } }
+    }
+  }
+
+  var bands = [
+    {y:0.30, amp:34, wl:0.7, sp:0.06, col:'126,240,182', h:150},
+    {y:0.24, amp:46, wl:0.5, sp:-0.04, col:'99,216,208', h:180},
+    {y:0.20, amp:30, wl:0.9, sp:0.03, col:'150,120,255', h:150}
+  ];
+  function drawAurora(t){
+    ac.clearRect(0,0,W,H);
+    ac.globalCompositeOperation='lighter';
+    bands.forEach(function(b,bi){
+      var baseY=H*b.y, ph=t*b.sp + bi, x, y;
+      ac.beginPath(); ac.moveTo(0, baseY);
+      for(x=0;x<=W;x+=14){
+        y=baseY + Math.sin(x/W*6.2832*b.wl + ph)*b.amp + Math.sin(x/W*13+ph*1.7)*b.amp*0.4;
+        ac.lineTo(x,y);
+      }
+      ac.lineTo(W, baseY-b.h); ac.lineTo(0, baseY-b.h); ac.closePath();
+      var g=ac.createLinearGradient(0, baseY-b.h, 0, baseY+30);
+      g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.65,'rgba('+b.col+',0.20)'); g.addColorStop(1,'rgba('+b.col+',0)');
+      ac.fillStyle=g; ac.fill();
+    });
+    ac.globalCompositeOperation='source-over';
+  }
+
+  function drawLand(){
+    function hill(base, amp, col){
+      var x; sc.beginPath(); sc.moveTo(0,H); sc.lineTo(0,base);
+      for(x=0;x<=W;x+=20){ sc.lineTo(x, base + Math.sin(x/W*6+amp)*amp*6 - Math.sin(x/W*3)*amp*4); }
+      sc.lineTo(W,H); sc.closePath(); sc.fillStyle=col; sc.fill();
+    }
+    hill(H*0.86, 2.2, 'rgba(20,34,40,0.9)');
+    hill(H*0.90, 1.4, 'rgba(200,225,230,0.10)');
+    hill(H*0.93, 1.0, 'rgba(220,238,240,0.14)');
+  }
+
+  var t0 = performance.now();
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+  function frame(now){
+    requestAnimationFrame(frame);
+    var t=(now-t0)/1000, i;
+    drawAurora(t);
+    sc.clearRect(0,0,W,H);
+    for(i=0;i<stars.length;i++){ var s=stars[i], tw=0.55+0.45*Math.sin(t*s.s+s.t);
+      sc.globalAlpha=tw*0.9; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
+    sc.globalAlpha=1;
+    drawLand();
+    sc.lineCap='round';
+    for(i=0;i<edges.length;i++){ var e=edges[i], p=clamp((t-e.start)/0.55,0,1);
+      if(p<=0) continue; var a=word[e.a], b=word[e.b];
+      var ex=a.x+(b.x-a.x)*p, ey=a.y+(b.y-a.y)*p;
+      sc.strokeStyle='rgba(126,240,182,'+(0.55*Math.min(p*2,1))+')';
+      sc.lineWidth=1.0; sc.shadowColor='rgba(126,240,182,0.7)'; sc.shadowBlur=6;
+      sc.beginPath(); sc.moveTo(a.x,a.y); sc.lineTo(ex,ey); sc.stroke(); }
+    sc.shadowBlur=0;
+    for(i=0;i<word.length;i++){ var w=word[i], ap=clamp((t-w.appear)/0.5,0,1);
+      if(ap<=0) continue; var tw2=0.7+0.3*Math.sin(t*1.6+w.t), r=1.5*ap;
+      var grd=sc.createRadialGradient(w.x,w.y,0,w.x,w.y,r*4);
+      grd.addColorStop(0,'rgba(220,255,235,'+(ap*tw2)+')'); grd.addColorStop(0.4,'rgba(126,240,182,'+(ap*0.45)+')'); grd.addColorStop(1,'rgba(126,240,182,0)');
+      sc.fillStyle=grd; sc.beginPath(); sc.arc(w.x,w.y,r*4,0,6.2832); sc.fill();
+      sc.fillStyle='rgba(255,255,255,'+ap+')'; sc.beginPath(); sc.arc(w.x,w.y,r,0,6.2832); sc.fill(); }
+  }
+
+  window.addEventListener('resize', function(){ resize(); buildStars(); buildSnow(); });
+  resize(); buildStars(); buildSnow();
+  function fontDone(){ fontReady=true; buildConstellation(); if(reduce){ t0=performance.now()-9000; frame(performance.now()); } }
+  if(document.fonts && document.fonts.load){ document.fonts.load('320px "Great Vibes"').then(fontDone); } else { fontDone(); }
+  if(reduce){ drawAurora(6); t0=performance.now()-9000; frame(performance.now()); } else { requestAnimationFrame(frame); }
+
+  var scrim=document.getElementById('scrim'), openP=null;
+  function openPanel(id){ closePanel(); openP=document.getElementById('p-'+id); if(!openP) return; scrim.classList.add('on'); openP.classList.add('on'); }
+  function closePanel(){ scrim.classList.remove('on'); if(openP){ openP.classList.remove('on'); openP=null; } }
+  document.querySelectorAll('[data-panel]').forEach(function(b){ b.onclick=function(){ openPanel(b.getAttribute('data-panel')); }; });
+  document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=closePanel; });
+  scrim.onclick=closePanel;
+  window.addEventListener('keydown', function(e){ if(e.key==='Escape') closePanel(); });
+
+  var actx=null, gain=null, on=false;
+  document.getElementById('audioBtn').onclick=function(){
+    if(!actx){
+      try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+      gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination);
+      var filt=actx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=520; filt.connect(gain);
+      [110,164.81,220].forEach(function(f,i){ var o=actx.createOscillator(); o.type='sine'; o.frequency.value=f;
+        var og=actx.createGain(); og.gain.value=i===0?0.5:0.25; o.connect(og); og.connect(filt); o.start();
+        var lfo=actx.createOscillator(); lfo.frequency.value=0.05+i*0.03; var lg=actx.createGain(); lg.gain.value=6;
+        lfo.connect(lg); lg.connect(o.frequency); lfo.start(); });
+    }
+    if(actx.state==='suspended') actx.resume();
+    on=!on; gain.gain.setTargetAtTime(on?0.12:0, actx.currentTime, 0.6);
+    this.style.color = on ? 'var(--green)' : 'var(--muted)';
+    this.innerHTML = on ? '&#9835;' : '&#9834;';
+  };
+})();
+</script>
+</body>
+</html>
