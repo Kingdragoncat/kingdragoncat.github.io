@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Sacramento&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#eaf2ee; --muted:#9fb4b0; --green:#7ef0b6; --teal:#63d8d0; --violet:#b79bff;
@@ -179,20 +179,20 @@
   function buildSnow(){ snow=[]; var n=Math.round(W*H/16000);
     for(var i=0;i<n;i++){ snow.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*2+0.6, sp:8+Math.random()*22, dr:Math.random()*0.6-0.3, ph:Math.random()*6.28}); } }
 
-  var word = [], edges = [], fontReady = false;
+  var word = [], edges = [], paths = [], totalOrd = 0, fontReady = false;
   function buildConstellation(){
     word=[]; edges=[]; if(!fontReady) return;
     var off=document.createElement('canvas'); off.width=1400; off.height=460;
     var oc=off.getContext('2d');
     oc.clearRect(0,0,off.width,off.height);
     oc.fillStyle='#fff'; oc.textAlign='center'; oc.textBaseline='middle';
-    oc.font='340px "Sacramento"';
+    oc.font='320px "Great Vibes"';
     var fw=oc.measureText('Jonah').width; var fs=320*Math.min(1,(off.width*0.86)/fw);
-    oc.font=fs+'px "Sacramento"';
+    oc.font=fs+'px "Great Vibes"';
     oc.fillText('Jonah', off.width/2, off.height/2);
     var img=oc.getImageData(0,0,off.width,off.height).data, pts=[], x, y, i, j;
     for(y=0;y<off.height;y+=3){ for(x=0;x<off.width;x+=3){ if(img[(y*off.width+x)*4+3]>128) pts.push([x,y]); } }
-    var D=13, acc=[];
+    var D=21, acc=[];
     for(i=0;i<pts.length;i++){ var p=pts[i], ok=true;
       for(j=0;j<acc.length;j++){ var ax=p[0]-acc[j][0], ay=p[1]-acc[j][1]; if(ax*ax+ay*ay<D*D){ ok=false; break; } }
       if(ok) acc.push(p); }
@@ -203,17 +203,18 @@
     var targetW=Math.min(W*0.6, 620), scale=targetW/bw, ox=(W-targetW)/2, oy=H*0.15;
     acc.sort(function(a,b){ return a[0]-b[0]; });
     acc.forEach(function(p,ix){ word.push({ x:ox+(p[0]-minx)*scale, y:oy+(p[1]-miny)*scale, t:Math.random()*6.28, appear:0.4+ix*0.013, mag:0.7+Math.pow(Math.random(),2.2)*1.25 }); });
-    var TH=D*2.8*scale, visited={}, count=0, total=word.length, ord=0;
+    var TH=D*3.0*scale, visited={}, count=0, total=word.length, ord=0; paths=[];
     function nearest(idx){ var best=-1, bd=TH*TH, q;
       for(q=0;q<word.length;q++){ if(q===idx||visited[q]) continue;
         var dx=word[idx].x-word[q].x, dy=word[idx].y-word[q].y, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=q; } }
       return best; }
     while(count<total){
       var st=-1, q; for(q=0;q<word.length;q++){ if(!visited[q]){ st=q; break; } }
-      if(st<0) break; visited[st]=1; count++; var cur=st;
-      while(true){ var nx=nearest(cur); if(nx<0) break;
-        visited[nx]=1; count++; edges.push({ a:cur, b:nx, start:0.5+ord*0.012 }); ord++; cur=nx; }
+      if(st<0) break; visited[st]=1; count++; word[st].ord=ord++; var chain=[st], cur=st;
+      while(true){ var nx=nearest(cur); if(nx<0) break; visited[nx]=1; count++; word[nx].ord=ord++; chain.push(nx); cur=nx; }
+      paths.push(chain);
     }
+    totalOrd = ord;
   }
 
   var bands = [
@@ -261,13 +262,17 @@
       sc.globalAlpha=tw*0.9; sc.beginPath(); sc.arc(s.x,s.y,s.r,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
     sc.globalAlpha=1;
     drawLand();
-    sc.lineCap='round';
-    for(i=0;i<edges.length;i++){ var e=edges[i], p=clamp((t-e.start)/0.55,0,1);
-      if(p<=0) continue; var a=word[e.a], b=word[e.b];
-      var ex=a.x+(b.x-a.x)*p, ey=a.y+(b.y-a.y)*p;
-      sc.strokeStyle='rgba(200,216,255,'+(0.3*Math.min(p*2,1))+')';
-      sc.lineWidth=0.8; sc.shadowColor='rgba(200,216,255,0.4)'; sc.shadowBlur=4;
-      sc.beginPath(); sc.moveTo(a.x,a.y); sc.lineTo(ex,ey); sc.stroke(); }
+    sc.lineCap='round'; sc.lineJoin='round';
+    var reveal = clamp((t-0.7)/2.8,0,1)*totalOrd;
+    sc.strokeStyle='rgba(205,220,255,0.34)'; sc.lineWidth=0.9; sc.shadowColor='rgba(205,220,255,0.4)'; sc.shadowBlur=4;
+    for(i=0;i<paths.length;i++){ var ch=paths[i]; if(ch.length<2) continue;
+      sc.beginPath(); var started=false, k;
+      for(k=0;k<ch.length;k++){ var wn=word[ch[k]]; if(wn.ord>reveal) break;
+        if(!started){ sc.moveTo(wn.x,wn.y); started=true; }
+        else { var pv=word[ch[k-1]], mx2=(pv.x+wn.x)/2, my2=(pv.y+wn.y)/2; sc.quadraticCurveTo(pv.x,pv.y,mx2,my2); } }
+      if(started && k<ch.length && k>0){ var pv2=word[ch[k-1]], nx2=word[ch[k]], fr=clamp(reveal-pv2.ord,0,1);
+        sc.lineTo(pv2.x+(nx2.x-pv2.x)*fr, pv2.y+(nx2.y-pv2.y)*fr); }
+      sc.stroke(); }
     sc.shadowBlur=0;
     for(i=0;i<word.length;i++){ var w=word[i], ap=clamp((t-w.appear)/0.5,0,1);
       if(ap<=0) continue; var mg=w.mag||1, tw2=0.6+0.4*Math.sin(t*1.5+w.t), r=0.95*mg*ap, gr=r*4.4;
@@ -282,7 +287,7 @@
   window.addEventListener('resize', function(){ resize(); buildStars(); buildSnow(); });
   resize(); buildStars(); buildSnow();
   function fontDone(){ fontReady=true; buildConstellation(); if(reduce){ t0=performance.now()-9000; frame(performance.now()); } }
-  if(document.fonts && document.fonts.load){ document.fonts.load('340px "Sacramento"').then(fontDone); } else { fontDone(); }
+  if(document.fonts && document.fonts.load){ document.fonts.load('320px "Great Vibes"').then(fontDone); } else { fontDone(); }
   if(reduce){ drawAurora(6); t0=performance.now()-9000; frame(performance.now()); } else { requestAnimationFrame(frame); }
 
   var scrim=document.getElementById('scrim'), openP=null;
