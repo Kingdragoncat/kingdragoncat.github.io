@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Sacramento&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#eaf2ee; --muted:#9fb4b0; --green:#7ef0b6; --teal:#63d8d0; --violet:#b79bff;
@@ -186,13 +186,13 @@
     var oc=off.getContext('2d');
     oc.clearRect(0,0,off.width,off.height);
     oc.fillStyle='#fff'; oc.textAlign='center'; oc.textBaseline='middle';
-    oc.font='320px "Great Vibes"';
+    oc.font='340px "Sacramento"';
     var fw=oc.measureText('Jonah').width; var fs=320*Math.min(1,(off.width*0.86)/fw);
-    oc.font=fs+'px "Great Vibes"';
+    oc.font=fs+'px "Sacramento"';
     oc.fillText('Jonah', off.width/2, off.height/2);
     var img=oc.getImageData(0,0,off.width,off.height).data, pts=[], x, y, i, j;
     for(y=0;y<off.height;y+=3){ for(x=0;x<off.width;x+=3){ if(img[(y*off.width+x)*4+3]>128) pts.push([x,y]); } }
-    var D=17, acc=[];
+    var D=13, acc=[];
     for(i=0;i<pts.length;i++){ var p=pts[i], ok=true;
       for(j=0;j<acc.length;j++){ var ax=p[0]-acc[j][0], ay=p[1]-acc[j][1]; if(ax*ax+ay*ay<D*D){ ok=false; break; } }
       if(ok) acc.push(p); }
@@ -203,12 +203,16 @@
     var targetW=Math.min(W*0.6, 620), scale=targetW/bw, ox=(W-targetW)/2, oy=H*0.15;
     acc.sort(function(a,b){ return a[0]-b[0]; });
     acc.forEach(function(p,ix){ word.push({ x:ox+(p[0]-minx)*scale, y:oy+(p[1]-miny)*scale, t:Math.random()*6.28, appear:0.4+ix*0.013, mag:0.7+Math.pow(Math.random(),2.2)*1.25 }); });
-    var TH=D*2.2*scale, eset={};
-    for(i=0;i<word.length;i++){ var cand=[];
-      for(j=0;j<word.length;j++){ if(j===i) continue; var dx=word[i].x-word[j].x, dy=word[i].y-word[j].y, d=dx*dx+dy*dy; if(d<TH*TH) cand.push([d,j]); }
-      cand.sort(function(a,b){ return a[0]-b[0]; });
-      for(var k=0;k<Math.min(2,cand.length);k++){ var jj=cand[k][1], lo=Math.min(i,jj), hi=Math.max(i,jj), key=lo+'_'+hi;
-        if(!eset[key]){ eset[key]=1; edges.push({ a:lo, b:hi, start:Math.max(word[lo].appear,word[hi].appear)+0.12 }); } }
+    var TH=D*2.8*scale, visited={}, count=0, total=word.length, ord=0;
+    function nearest(idx){ var best=-1, bd=TH*TH, q;
+      for(q=0;q<word.length;q++){ if(q===idx||visited[q]) continue;
+        var dx=word[idx].x-word[q].x, dy=word[idx].y-word[q].y, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=q; } }
+      return best; }
+    while(count<total){
+      var st=-1, q; for(q=0;q<word.length;q++){ if(!visited[q]){ st=q; break; } }
+      if(st<0) break; visited[st]=1; count++; var cur=st;
+      while(true){ var nx=nearest(cur); if(nx<0) break;
+        visited[nx]=1; count++; edges.push({ a:cur, b:nx, start:0.5+ord*0.012 }); ord++; cur=nx; }
     }
   }
 
@@ -278,7 +282,7 @@
   window.addEventListener('resize', function(){ resize(); buildStars(); buildSnow(); });
   resize(); buildStars(); buildSnow();
   function fontDone(){ fontReady=true; buildConstellation(); if(reduce){ t0=performance.now()-9000; frame(performance.now()); } }
-  if(document.fonts && document.fonts.load){ document.fonts.load('320px "Great Vibes"').then(fontDone); } else { fontDone(); }
+  if(document.fonts && document.fonts.load){ document.fonts.load('340px "Sacramento"').then(fontDone); } else { fontDone(); }
   if(reduce){ drawAurora(6); t0=performance.now()-9000; frame(performance.now()); } else { requestAnimationFrame(frame); }
 
   var scrim=document.getElementById('scrim'), openP=null;
