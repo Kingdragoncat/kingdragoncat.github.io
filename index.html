@@ -4,13 +4,296 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jonah Novoseller</title>
+<meta name="description" content="Jonah Novoseller — 16-year-old developer. Nokia Future Tech Intern, founder of Mythofy, 8x national debater. Rust, security, hardware.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  html,body{height:100%; margin:0; background:#0a0a0a; color:#e8e8e8;
-    font-family:system-ui,-apple-system,sans-serif; display:flex; align-items:center; justify-content:center}
-  h1{font-weight:500; font-size:20px; letter-spacing:.3px; opacity:.7}
+  :root{
+    --bg:#f7f5f1; --ink:#18181a; --dim:#686662; --line:rgba(24,24,26,.10);
+    --blue:#3b5bfd; --violet:#8b5cf6; --card:#ffffff;
+    --sans:"Inter", system-ui, sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.5}
+  a{color:inherit}
+  ::selection{background:rgba(59,91,253,.15)}
+  html{scrollbar-width:thin; scrollbar-color:var(--blue) rgba(0,0,0,.05)}
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-track{background:rgba(0,0,0,.03)}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--blue),var(--violet)); border-radius:8px; border:2px solid var(--bg)}
+
+  #mesh{position:fixed; inset:0; z-index:0; width:100%; height:100%}
+  .wrap{position:relative; z-index:1}
+
+  header{position:fixed; top:0; left:0; right:0; z-index:20; display:flex; align-items:center;
+    justify-content:space-between; padding:18px clamp(20px,5vw,60px);
+    background:rgba(247,245,241,.75); backdrop-filter:blur(12px); border-bottom:1px solid var(--line)}
+  header .mark{font-family:var(--mono); font-weight:600; font-size:15px; letter-spacing:.2px}
+  header nav{display:flex; gap:26px; font-family:var(--mono); font-size:13px}
+  header nav a{text-decoration:none; color:var(--dim); transition:.2s}
+  header nav a:hover{color:var(--blue)}
+  @media(max-width:560px){header nav{display:none}}
+
+  .hero{position:relative; min-height:100vh; display:flex; flex-direction:column;
+    align-items:flex-start; justify-content:center; padding:0 clamp(20px,7vw,110px)}
+  .hero .hi{font-family:var(--mono); font-size:15px; color:var(--dim); margin-bottom:14px}
+  .hero .hi b{color:var(--ink)}
+  .hero h1{font-size:clamp(34px,6.4vw,64px); font-weight:700; margin:0; letter-spacing:-1px; line-height:1.06}
+  .hero h1 .accent{font-family:var(--mono); color:var(--blue)}
+  .hero .role{font-family:var(--mono); font-size:clamp(15px,2.2vw,19px); color:var(--dim); margin-top:16px; max-width:600px}
+  .hero .cta{display:flex; gap:12px; margin-top:30px; flex-wrap:wrap}
+  .btn{font-family:var(--mono); font-size:13px; padding:11px 20px; border-radius:8px; text-decoration:none;
+    border:1px solid var(--line); transition:.2s; background:var(--card)}
+  .btn.primary{background:var(--ink); color:#fff; border-color:var(--ink)}
+  .btn.primary:hover{background:var(--blue); border-color:var(--blue)}
+  .btn.ghost:hover{border-color:var(--blue); color:var(--blue)}
+
+  section{padding:100px clamp(20px,5.5vw,80px)}
+  .sec-inner{max-width:1040px; margin:0 auto}
+  .kicker{font-family:var(--mono); font-size:12px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--blue); margin:0 0 8px}
+  h2{font-family:var(--sans); font-weight:700; font-size:clamp(26px,3.4vw,34px); margin:0 0 30px; letter-spacing:-.3px}
+
+  .about p{color:#3a3936; font-size:16.5px; line-height:1.85; max-width:700px; margin:0 0 16px}
+  .tags{display:flex; flex-wrap:wrap; gap:9px; margin-top:24px}
+  .tag{font-family:var(--mono); font-size:12px; color:var(--dim); border:1px solid var(--line);
+    border-radius:20px; padding:6px 13px; background:var(--card)}
+
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line); border-radius:14px; padding:22px; background:var(--card);
+    box-shadow:0 1px 2px rgba(0,0,0,.03); transition:.2s; display:block; text-decoration:none}
+  .card:hover{border-color:var(--blue); transform:translateY(-3px); box-shadow:0 12px 28px rgba(59,91,253,.10)}
+  .card .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px}
+  .card .nm{font-family:var(--sans); font-weight:600; font-size:18px; color:var(--ink)}
+  .card .star{font-family:var(--mono); font-size:12px; color:var(--blue)}
+  .card p{font-size:14px; color:var(--dim); line-height:1.65; margin:0 0 15px}
+  .card .lang{font-family:var(--mono); font-size:11.5px; color:var(--dim); display:flex; align-items:center; gap:7px}
+  .card .dot{width:7px; height:7px; border-radius:50%; background:var(--blue); display:inline-block}
+
+  .timeline{border-left:1px solid var(--line); margin-left:6px; padding-left:28px; display:flex;
+    flex-direction:column; gap:32px}
+  .tl-item{position:relative}
+  .tl-item::before{content:''; position:absolute; left:-33px; top:4px; width:9px; height:9px; border-radius:50%;
+    background:var(--blue); box-shadow:0 0 0 4px rgba(59,91,253,.14)}
+  .tl-item .when{font-family:var(--mono); font-size:11px; color:var(--blue); letter-spacing:1px; text-transform:uppercase}
+  .tl-item h3{margin:6px 0 6px; font-size:19px; font-weight:600}
+  .tl-item p{margin:0; color:var(--dim); font-size:14.5px; line-height:1.7; max-width:600px}
+
+  footer{border-top:1px solid var(--line); padding:50px clamp(20px,5.5vw,80px) 60px; text-align:center}
+  footer .fname{font-family:var(--sans); font-weight:700; font-size:20px}
+  footer .flinks{display:flex; gap:22px; justify-content:center; margin:18px 0; font-family:var(--mono); font-size:13px}
+  footer .flinks a{text-decoration:none; color:var(--dim); transition:.2s}
+  footer .flinks a:hover{color:var(--blue)}
+  footer .fmeta{font-family:var(--mono); font-size:11px; color:var(--dim); opacity:.7}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
+  .reveal.on{opacity:1; transform:translateY(0)}
 </style>
 </head>
 <body>
-<h1>Jonah Novoseller</h1>
+<canvas id="mesh"></canvas>
+
+<div class="wrap">
+  <header>
+    <span class="mark">jonah.dev</span>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="hi">Hi, I'm <b>Jonah</b> 👋</div>
+    <h1>I am a <span class="accent">Full&#8209;Stack</span><br>Developer</h1>
+    <div class="role">16 y/o · Nokia Future Tech Intern · Founder, Mythofy · 8&times; national debater · Winnipeg, Canada</div>
+    <div class="cta">
+      <a class="btn primary" href="#projects">View projects</a>
+      <a class="btn ghost" href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/jonah-novoseller" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <section id="projects">
+    <div class="sec-inner">
+      <div class="kicker reveal">Selected work</div>
+      <h2 class="reveal">Projects</h2>
+      <div class="grid">
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/blackbox" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">blackbox</span></div>
+          <p>A black-box flight recorder for terminal &amp; SSH sessions — records and replays sessions for audit. Hash-chained tamper-evident logs, full-text search, CI-tested.</p>
+          <div class="lang"><span class="dot"></span>Rust</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/Knox-Key" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">Knox-Key</span><span class="star">★ 5</span></div>
+          <p>High-performance, open-source hardware authenticator for secure digital identity and crypto operations. Zero-trust architecture, dedicated secure element, USB-C form factor.</p>
+          <div class="lang"><span class="dot"></span>C · hardware</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/ClusterCord" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">ClusterCord</span></div>
+          <p>Secure, open-source Discord-native Kubernetes management. Live terminal execs, RBAC templates, Helm integration, audit logs, OTP verification.</p>
+          <div class="lang"><span class="dot"></span>TypeScript</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/MotionKit" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">MotionKit</span></div>
+          <p>A modern, flexible animation and UI component library for React, built on Framer Motion.</p>
+          <div class="lang"><span class="dot"></span>TypeScript</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/CombatGhost" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">CombatGhost</span></div>
+          <p>Minecraft plugin that prevents combat logging: tags players in combat, spawns ghost NPCs on logout, restricts protected regions while tagged.</p>
+          <div class="lang"><span class="dot"></span>Java</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/MLP" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">MLP</span></div>
+          <p>A lightweight Minecraft plugin that adds fully customizable launchpads — materials, velocities, cooldowns, synced pads.</p>
+          <div class="lang"><span class="dot"></span>Java</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/HackPad" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">HackPad</span></div>
+          <p>My wonderful RGB hackpad of doom and awesomeness — a custom macropad build, firmware and all.</p>
+          <div class="lang"><span class="dot"></span>HTML · hardware</div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/Kingdragoncat/myde-vps-agent" target="_blank" rel="noopener">
+          <div class="top"><span class="nm">myde-vps-agent</span></div>
+          <p>Ultra-lightweight VPS monitoring agent for MyDE — minimal footprint, built for small self-hosted boxes.</p>
+          <div class="lang"><span class="dot"></span>JavaScript</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="sec-inner about">
+      <div class="kicker reveal">Who I am</div>
+      <h2 class="reveal">About</h2>
+      <p class="reveal">I'm a 16-year-old developer who builds web platforms, plugins, and payment systems. I'm the Future Tech Intern at Nokia, and I founded and run <a href="https://mythofy.net" target="_blank" rel="noopener" style="color:var(--blue); text-decoration:none">Mythofy</a>, a platform of tools for creators and communities.</p>
+      <p class="reveal">Lately I'm deep in security and hardware — <b style="color:var(--ink)">Knox Key</b> is my open-source hardware authenticator, and <b style="color:var(--ink)">blackbox</b> is a Rust session-recording tool built for real audit trails. Outside of code, I'm an 8&times; national debater.</p>
+      <div class="tags reveal">
+        <span class="tag">Rust</span><span class="tag">TypeScript</span><span class="tag">Java</span>
+        <span class="tag">C</span><span class="tag">JavaScript</span><span class="tag">Security</span>
+        <span class="tag">Hardware</span><span class="tag">Kubernetes</span><span class="tag">Systems</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-inner">
+      <div class="kicker reveal">Where I've been</div>
+      <h2 class="reveal">Experience</h2>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="when">Present</div>
+          <h3>Future Tech Intern — Nokia</h3>
+          <p>Working on forward-looking technology as part of Nokia's internship program.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="when">Founder</div>
+          <h3>Mythofy</h3>
+          <p>Founded and lead Mythofy, a platform of tools for creators and communities, including a Stripe Connect payment system for the Minecraft creator economy.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="when">2023 — present</div>
+          <h3>Open source &amp; independent projects</h3>
+          <p>20 public repositories spanning Rust security tooling, hardware authenticators, Kubernetes management, and Minecraft server infrastructure.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="when">Ongoing</div>
+          <h3>Competitive debate</h3>
+          <p>8&times; national debater — competing and mentoring in debate and public speaking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="fname">Jonah Novoseller</div>
+    <div class="flinks">
+      <a href="https://github.com/Kingdragoncat" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/jonah-novoseller" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://mythofy.net" target="_blank" rel="noopener">Mythofy</a>
+    </div>
+    <div class="fmeta">Winnipeg, Canada</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var cv = document.getElementById('mesh'), ctx = cv.getContext('2d');
+  var W, H, DPR = Math.min(window.devicePixelRatio||1, 2), pts=[];
+
+  function mulberry32(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  function build(){
+    W = window.innerWidth; H = document.documentElement.scrollHeight;
+    cv.width = W*DPR; cv.height = H*DPR; cv.style.width = W+'px'; cv.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    var rng = mulberry32(4242);
+    var cols = Math.max(6, Math.round(W/120)), rows = Math.max(6, Math.round(H/120));
+    pts = [];
+    for(var r=0;r<=rows;r++){
+      for(var c=0;c<=cols;c++){
+        var jx=(rng()-0.5)*90, jy=(rng()-0.5)*90;
+        pts.push({x:(c/cols)*W + jx, y:(r/rows)*H + jy});
+      }
+    }
+    draw();
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var glow = ctx.createRadialGradient(W*0.86, H*0.10, 0, W*0.86, H*0.10, W*0.42);
+    glow.addColorStop(0,'rgba(139,92,246,0.10)'); glow.addColorStop(1,'rgba(139,92,246,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
+    var glow2 = ctx.createRadialGradient(W*0.08, H*0.06, 0, W*0.08, H*0.06, W*0.3);
+    glow2.addColorStop(0,'rgba(59,91,253,0.07)'); glow2.addColorStop(1,'rgba(59,91,253,0)');
+    ctx.fillStyle = glow2; ctx.fillRect(0,0,W,H);
+
+    var link = 150, i, j, p, q, dx, dy, d;
+    ctx.lineWidth = 1;
+    for(i=0;i<pts.length;i++){
+      p = pts[i];
+      for(j=i+1;j<pts.length;j++){
+        q = pts[j]; dx=p.x-q.x; dy=p.y-q.y;
+        if(Math.abs(dx)>link || Math.abs(dy)>link) continue;
+        d = Math.sqrt(dx*dx+dy*dy);
+        if(d<link){
+          ctx.strokeStyle = 'rgba(24,24,26,'+(0.055*(1-d/link))+')';
+          ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
+        }
+      }
+    }
+    ctx.fillStyle = 'rgba(24,24,26,0.12)';
+    for(i=0;i<pts.length;i++){ p=pts[i]; ctx.beginPath(); ctx.arc(p.x,p.y,1.3,0,6.2832); ctx.fill(); }
+  }
+
+  window.addEventListener('resize', build);
+  build();
+  window.addEventListener('load', build);
+
+  var els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+    }, {threshold:0.15});
+    els.forEach(function(el){ io.observe(el); });
+  } else { els.forEach(function(el){ el.classList.add('on'); }); }
+})();
+</script>
 </body>
 </html>
