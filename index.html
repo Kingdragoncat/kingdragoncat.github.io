@@ -249,13 +249,11 @@
   var A = document.getElementById('aurora'), S = document.getElementById('sky');
   var ac = A.getContext('2d'), sc = S.getContext('2d');
   var W, H, DPR = Math.min(window.devicePixelRatio||1, 2);
-  var nameFontPx=0, nameCX=0, nameCY=0, fontReady=false;
-
   function resize(){
     W = hero.clientWidth; H = hero.clientHeight;
     [A,S].forEach(function(cv){ cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px'; });
     ac.setTransform(DPR,0,0,DPR,0,0); sc.setTransform(DPR,0,0,DPR,0,0);
-    computeNameBox(); buildForest();
+    buildForest();
   }
 
   var stars = [], shooters = [];
@@ -277,14 +275,6 @@
     pinesFront = buildPines(Math.max(6,Math.round(W/78)), 0.29, 0.15, 0.22, 0.11, 0.55);
   }
 
-  function computeNameBox(){
-    if(!fontReady) return;
-    sc.font='300px "Great Vibes"';
-    var wdt=sc.measureText('Jonah').width||1;
-    var targetW=Math.min(W*0.6, 560);
-    nameFontPx=300*targetW/wdt; nameCX=W/2; nameCY=H*0.5;
-  }
-
   var curt=[{col:'70,225,150',sp:0.05,wl:0.6,amp:70,base:0.5,h:1.05},
             {col:'80,205,215',sp:-0.035,wl:0.42,amp:95,base:0.55,h:1.05},
             {col:'150,115,255',sp:0.025,wl:0.85,amp:55,base:0.42,h:0.95}];
@@ -303,9 +293,6 @@
       g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.17)'); g.addColorStop(1,'rgba('+b.col+',0)');
       ac.fillStyle=g; ac.fill(); });
     ac.filter='none'; ac.globalCompositeOperation='source-over';
-    if(nameFontPx){ ac.globalCompositeOperation='destination-out'; ac.fillStyle='#000';
-      ac.textAlign='center'; ac.textBaseline='middle'; ac.font=nameFontPx+'px "Great Vibes"';
-      ac.fillText('Jonah', nameCX, nameCY); ac.globalCompositeOperation='source-over'; }
   }
 
   function drawTree(ctx, x, baseY, th, tw, tiers, lean){
@@ -369,9 +356,6 @@
       var rr=s.r*(0.7+tw*0.6);
       sc.globalAlpha=0.25+tw*0.75; sc.beginPath(); sc.arc(s.x,s.y,rr,0,6.2832); sc.fillStyle='#eaf6ff'; sc.fill(); }
     sc.globalAlpha=1;
-    if(nameFontPx){ sc.globalCompositeOperation='destination-out'; sc.fillStyle='#000';
-      sc.textAlign='center'; sc.textBaseline='middle'; sc.font=nameFontPx+'px "Great Vibes"';
-      sc.fillText('Jonah', nameCX, nameCY); sc.globalCompositeOperation='source-over'; }
     if(Math.random()<0.006 && shooters.length<3){ shooters.push({x:Math.random()*W*0.85, y:Math.random()*H*0.35, vx:7+Math.random()*6, vy:2.2+Math.random()*2.6, life:1}); }
     sc.lineCap='round';
     for(var q=shooters.length-1;q>=0;q--){ var sh=shooters[q]; sh.x+=sh.vx; sh.y+=sh.vy; sh.life-=0.014;
@@ -384,9 +368,7 @@
 
   window.addEventListener('resize', function(){ resize(); buildStars(); });
   resize(); buildStars();
-  function fontDone(){ fontReady=true; computeNameBox(); if(reduce){ drawAurora(6); frame(performance.now()); } }
-  if(document.fonts && document.fonts.load){ document.fonts.load('320px "Great Vibes"').then(fontDone); } else { fontDone(); }
-  if(!reduce){ requestAnimationFrame(frame); }
+  if(reduce){ drawAurora(6); frame(performance.now()); } else { requestAnimationFrame(frame); }
 
   var els = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
