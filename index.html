@@ -23,14 +23,18 @@
   a{color:inherit}
   ::selection{background:rgba(126,240,182,.25)}
 
+  html{scrollbar-width:thin; scrollbar-color:var(--teal) rgba(255,255,255,.04)}
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--green),var(--teal)); border-radius:8px;
+    border:2px solid var(--bg); box-shadow:0 0 8px rgba(126,240,182,.35)}
+  ::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--teal),var(--violet))}
+
   header{position:fixed; top:0; left:0; right:0; z-index:20; display:flex; align-items:center;
     justify-content:space-between; padding:16px clamp(20px,5vw,60px); backdrop-filter:blur(16px) saturate(1.3);
     background:linear-gradient(rgba(6,12,10,.72),rgba(6,12,10,.5));
     border-bottom:1px solid var(--line); box-shadow:0 8px 30px rgba(0,0,0,.35)}
-  header .mark{font-family:var(--script); font-size:26px; color:var(--ink); text-shadow:0 0 16px rgba(126,240,182,.4);
-    display:flex; align-items:center; gap:8px}
-  header .mark::after{content:''; width:6px; height:6px; border-radius:50%; background:var(--green);
-    box-shadow:0 0 8px var(--green); display:inline-block}
+  header .mark{font-family:var(--script); font-size:22px; color:var(--ink); text-shadow:0 0 16px rgba(126,240,182,.4)}
   header nav{display:flex; gap:26px; font-family:var(--serif); font-size:16px}
   header nav a{text-decoration:none; color:var(--dim); transition:.2s}
   header nav a:hover{color:var(--green)}
@@ -109,7 +113,7 @@
 <body>
 
 <header>
-  <span class="mark">Jonah</span>
+  <span class="mark">Jonah Novoseller</span>
   <nav>
     <a href="#projects">Projects</a>
     <a href="#about">About</a>
