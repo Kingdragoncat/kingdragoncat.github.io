@@ -253,98 +253,11 @@
     W = hero.clientWidth; H = hero.clientHeight;
     [A,S].forEach(function(cv){ cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px'; });
     ac.setTransform(DPR,0,0,DPR,0,0); sc.setTransform(DPR,0,0,DPR,0,0);
-    buildForest();
   }
 
   var stars = [], shooters = [];
   function buildStars(){ stars=[]; var n=Math.round(W*H/6500);
     for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
-
-  var ridge=[], pinesMid=[], pinesFront=[];
-  function buildPines(n, hFracBase, hFracVar, wrBase, wrVar, spread){
-    var arr=[], spacing=W/n, i, x;
-    for(i=0;i<n;i++){ x = i*spacing + (Math.random()-0.5)*spacing*spread;
-      arr.push({ x:x, hf:hFracBase + Math.random()*hFracVar, wr:wrBase + Math.random()*wrVar,
-        tiers: 4 + (Math.random()<0.45?1:0), lean:(Math.random()-0.5)*0.16, seed:Math.random()*10 }); }
-    return arr;
-  }
-  function buildForest(){
-    ridge=[]; var rn=16, i;
-    for(i=0;i<=rn;i++){ ridge.push(Math.random()*0.5+0.25); }
-    pinesMid = buildPines(Math.max(7,Math.round(W/58)), 0.15, 0.07, 0.20, 0.09, 0.7);
-    pinesFront = buildPines(Math.max(6,Math.round(W/78)), 0.29, 0.15, 0.22, 0.11, 0.55);
-  }
-
-  var curt=[{col:'70,225,150',sp:0.05,wl:0.6,amp:70,base:0.5,h:1.05},
-            {col:'80,205,215',sp:-0.035,wl:0.42,amp:95,base:0.55,h:1.05},
-            {col:'150,115,255',sp:0.025,wl:0.85,amp:55,base:0.42,h:0.95}];
-  function drawAurora(t){
-    ac.clearRect(0,0,W,H);
-    var bgw=ac.createLinearGradient(0,0,0,H);
-    bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
-    ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
-    ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
-    curt.forEach(function(b,bi){
-      var baseY=H*b.base + Math.sin(t*0.25+bi*1.7)*H*0.05, ph=t*b.sp*3.4+bi, x, y;
-      ac.beginPath(); ac.moveTo(0, baseY);
-      for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
-      ac.lineTo(W, baseY-H*b.h); ac.lineTo(0, baseY-H*b.h); ac.closePath();
-      var g=ac.createLinearGradient(0, baseY-H*b.h, 0, baseY+40);
-      g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.17)'); g.addColorStop(1,'rgba('+b.col+',0)');
-      ac.fillStyle=g; ac.fill(); });
-    ac.filter='none'; ac.globalCompositeOperation='source-over';
-  }
-
-  function drawTree(ctx, x, baseY, th, tw, tiers, lean){
-    var trunkW = tw*0.09, lx = lean*th;
-    ctx.moveTo(x-trunkW/2, baseY);
-    ctx.lineTo(x+trunkW/2, baseY);
-    ctx.lineTo(x+trunkW/2+lx*0.15, baseY-th*0.09);
-    ctx.lineTo(x-trunkW/2+lx*0.15, baseY-th*0.09);
-    ctx.closePath();
-    var usableH = th*0.94, k, frac0, frac1, tierTopY, tierBotY, halfW, midW, midY, sway;
-    for(k=0;k<tiers;k++){
-      frac0 = k/tiers; frac1 = (k+1)/tiers;
-      sway = lx*frac1;
-      tierTopY = baseY - usableH*frac1;
-      tierBotY = baseY - usableH*frac0*0.76;
-      halfW = (tw/2) * (1 - frac0*0.7);
-      midW = halfW*0.38;
-      midY = tierBotY - (tierBotY-tierTopY)*0.26;
-      ctx.moveTo(x+sway, tierTopY);
-      ctx.lineTo(x - halfW + sway*0.4, tierBotY);
-      ctx.lineTo(x - midW + sway*0.6, midY);
-      ctx.lineTo(x + sway*0.7, tierBotY - (tierBotY-tierTopY)*0.1);
-      ctx.lineTo(x + midW + sway*0.6, midY);
-      ctx.lineTo(x + halfW + sway*0.4, tierBotY);
-      ctx.closePath();
-    }
-  }
-
-  function drawForest(){
-    var ry = H*0.85, rw = W/(ridge.length-1||1), i;
-    sc.beginPath(); sc.moveTo(0,H);
-    sc.lineTo(0, ry - ridge[0]*H*0.15);
-    for(i=0;i<ridge.length;i++){ sc.lineTo(i*rw, ry - ridge[i]*H*0.15); }
-    sc.lineTo(W,H); sc.closePath();
-    var rg = sc.createLinearGradient(0, ry-H*0.15, 0, ry);
-    rg.addColorStop(0,'rgba(150,180,195,0.17)'); rg.addColorStop(1,'rgba(70,100,110,0.05)');
-    sc.fillStyle=rg; sc.fill();
-
-    var midY = H*0.905;
-    sc.beginPath();
-    pinesMid.forEach(function(p){ drawTree(sc, p.x, midY, H*p.hf, H*p.hf*p.wr, p.tiers, p.lean); });
-    sc.fillStyle='rgba(16,40,34,0.65)'; sc.fill();
-
-    var mistG = sc.createLinearGradient(0, H*0.87, 0, H*0.98);
-    mistG.addColorStop(0,'rgba(180,210,205,0)'); mistG.addColorStop(1,'rgba(180,210,205,0.13)');
-    sc.fillStyle=mistG; sc.fillRect(0,H*0.85,W,H*0.15);
-
-    var frontY = H*0.995;
-    sc.beginPath();
-    pinesFront.forEach(function(p){ drawTree(sc, p.x, frontY, H*p.hf, H*p.hf*p.wr, p.tiers, p.lean); });
-    sc.fillStyle='#040c08'; sc.fill();
-  }
 
   var t0 = performance.now();
   function frame(now){
@@ -363,7 +276,6 @@
       var tx=sh.x-sh.vx*7, ty=sh.y-sh.vy*7, gg=sc.createLinearGradient(sh.x,sh.y,tx,ty);
       gg.addColorStop(0,'rgba(255,255,255,'+(Math.min(1,sh.life)*0.9)+')'); gg.addColorStop(1,'rgba(255,255,255,0)');
       sc.strokeStyle=gg; sc.lineWidth=2; sc.beginPath(); sc.moveTo(sh.x,sh.y); sc.lineTo(tx,ty); sc.stroke(); }
-    drawForest();
   }
 
   window.addEventListener('resize', function(){ resize(); buildStars(); });
