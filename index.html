@@ -259,6 +259,26 @@
   function buildStars(){ stars=[]; var n=Math.round(W*H/6500);
     for(var i=0;i<n;i++){ stars.push({x:Math.random()*W, y:Math.random()*H*0.82, r:Math.random()*1.3+0.2, t:Math.random()*6.28, s:0.5+Math.random()}); } }
 
+  var curt=[{col:'70,225,150',sp:0.05,wl:0.6,amp:70,base:0.5,h:1.05},
+            {col:'80,205,215',sp:-0.035,wl:0.42,amp:95,base:0.55,h:1.05},
+            {col:'150,115,255',sp:0.025,wl:0.85,amp:55,base:0.42,h:0.95}];
+  function drawAurora(t){
+    ac.clearRect(0,0,W,H);
+    var bgw=ac.createLinearGradient(0,0,0,H);
+    bgw.addColorStop(0,'rgba(24,70,95,0.12)'); bgw.addColorStop(0.45,'rgba(46,130,95,0.18)'); bgw.addColorStop(1,'rgba(24,60,80,0.12)');
+    ac.fillStyle=bgw; ac.fillRect(0,0,W,H);
+    ac.globalCompositeOperation='lighter'; ac.filter='blur(28px)';
+    curt.forEach(function(b,bi){
+      var baseY=H*b.base + Math.sin(t*0.25+bi*1.7)*H*0.05, ph=t*b.sp*3.4+bi, x, y;
+      ac.beginPath(); ac.moveTo(0, baseY);
+      for(x=0;x<=W;x+=14){ y=baseY + Math.sin(x/W*6.2832*b.wl+ph)*b.amp + Math.sin(x/W*13+ph*1.5)*b.amp*0.4; ac.lineTo(x,y); }
+      ac.lineTo(W, baseY-H*b.h); ac.lineTo(0, baseY-H*b.h); ac.closePath();
+      var g=ac.createLinearGradient(0, baseY-H*b.h, 0, baseY+40);
+      g.addColorStop(0,'rgba('+b.col+',0)'); g.addColorStop(0.6,'rgba('+b.col+',0.17)'); g.addColorStop(1,'rgba('+b.col+',0)');
+      ac.fillStyle=g; ac.fill(); });
+    ac.filter='none'; ac.globalCompositeOperation='source-over';
+  }
+
   var t0 = performance.now();
   function frame(now){
     requestAnimationFrame(frame);
